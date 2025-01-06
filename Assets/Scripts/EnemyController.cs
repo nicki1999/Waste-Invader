@@ -49,7 +49,6 @@ private float slowdownFactor = 0.3f;
                     if (Random.Range(1, 101) <= gameManager.TintedEnemyChance)
                     {
                         enemy = Instantiate(TintedEnemies[Random.Range(0, TintedEnemies.Length)], transform);
-                        Debug.Log("this is enemy i " + i + "j " + j + " " + enemy);
                         Color enemyColor = new Color();
                         if (enemy.Stage1EnemyType[0] == 1)
                         {

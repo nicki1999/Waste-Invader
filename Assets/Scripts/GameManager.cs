@@ -687,8 +687,9 @@ public GameObject[] buttons;
         if (InGameUI.activeSelf)
         {
             Button[] conditionalButtons = InGameUI.GetComponentsInChildren<Button>(true);
+            // buttons that need to be disabled for stage 1
             String[] disableButtons = new string[] { "button_yellow", "button_blue", "button_brown", "button_black" };
-                    if (Stage2UI.activeSelf == false){
+                    if ( Stage == 1){
                           foreach(Button button in conditionalButtons){
                 foreach (string disableButton in disableButtons)
             {
@@ -700,7 +701,7 @@ public GameObject[] buttons;
             }
             }
                     }
-                    else{
+                    else if (Stage == 2){
                         foreach(Button button in conditionalButtons){
                 foreach (string disableButton in disableButtons)
             {
