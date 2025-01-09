@@ -246,6 +246,7 @@ public GameObject[] buttons;
     // If no lives and player hits enter, restart
     private void Update()
     {
+
         if (MenuUI.activeSelf)
             if (Input.GetKeyDown(KeyCode.Escape))
                 ExitGame();
