@@ -358,7 +358,7 @@ namespace UnityEngine.EventSystems
                 if (newPressed == null)
                     newPressed = newClick;
 
-                // Debug.Log("Pressed: " + newPressed);
+                 //Debug.Log("Pressed: " + newPressed);
 
                 float time = Time.unscaledTime;
 
@@ -393,10 +393,10 @@ namespace UnityEngine.EventSystems
             // PointerUp notification
             if (released)
             {
-                // Debug.Log("Executing pressup on: " + pointer.pointerPress);
+                 //Debug.Log("Executing pressup on: " + pointerEvent.pointerPress);
                 ExecuteEvents.Execute(pointerEvent.pointerPress, pointerEvent, ExecuteEvents.pointerUpHandler);
 
-                // Debug.Log("KeyCode: " + pointer.eventData.keyCode);
+                 //Debug.Log("KeyCode: " + pointerEvent.keyCode);
 
                 // see if we mouse up on the same element that we clicked on...
                 var pointerClickHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(currentOverGo);
@@ -523,7 +523,8 @@ namespace UnityEngine.EventSystems
 
         protected void ProcessMouseEvent()
         {
-            //ProcessMouseEvent(0);
+            ProcessMouseEvent(0);
+            //ProcessMouseEvent(2);
         }
 
         [Obsolete("This method is no longer checked, overriding it with return true does nothing!")]
@@ -541,18 +542,19 @@ namespace UnityEngine.EventSystems
             var leftButtonData = mouseData.GetButtonState(PointerEventData.InputButton.Left).eventData;
 
             m_CurrentFocusedGameObject = leftButtonData.buttonData.pointerCurrentRaycast.gameObject;
-
             // Process the first mouse button fully
-            ProcessMousePress(leftButtonData);
+if(id == 0 ){
+                ProcessMousePress(leftButtonData);
             ProcessMove(leftButtonData.buttonData);
             ProcessDrag(leftButtonData.buttonData);
-
+}
+else if (id == 2){
             // Now process right / middle clicks
             ProcessMousePress(mouseData.GetButtonState(PointerEventData.InputButton.Right).eventData);
             ProcessDrag(mouseData.GetButtonState(PointerEventData.InputButton.Right).eventData.buttonData);
             ProcessMousePress(mouseData.GetButtonState(PointerEventData.InputButton.Middle).eventData);
             ProcessDrag(mouseData.GetButtonState(PointerEventData.InputButton.Middle).eventData.buttonData);
-
+        }
             if (!Mathf.Approximately(leftButtonData.buttonData.scrollDelta.sqrMagnitude, 0.0f))
             {
                 var scrollHandler = ExecuteEvents.GetEventHandler<IScrollHandler>(leftButtonData.buttonData.pointerCurrentRaycast.gameObject);
@@ -578,6 +580,7 @@ namespace UnityEngine.EventSystems
             var pointerEvent = data.buttonData;
             var currentOverGo = pointerEvent.pointerCurrentRaycast.gameObject;
 
+
             // PointerDown notification
             if (data.PressedThisFrame())
             {
@@ -587,7 +590,6 @@ namespace UnityEngine.EventSystems
                 pointerEvent.useDragThreshold = true;
                 pointerEvent.pressPosition = pointerEvent.position;
                 pointerEvent.pointerPressRaycast = pointerEvent.pointerCurrentRaycast;
-
                 DeselectIfSelectionChanged(currentOverGo, pointerEvent);
 
                 // search for the control that will receive the press
@@ -600,7 +602,7 @@ namespace UnityEngine.EventSystems
                 if (newPressed == null)
                     newPressed = newClick;
 
-                // Debug.Log("Pressed: " + newPressed);
+                //Debug.Log("Pressed: " + newPressed);
 
                 float time = Time.unscaledTime;
 
@@ -637,6 +639,7 @@ namespace UnityEngine.EventSystems
             // PointerUp notification
             if (data.ReleasedThisFrame())
             {
+                //Debug.Log("Pressed: " + currentOverGo);
                 ReleaseMouse(pointerEvent, currentOverGo);
             }
         }

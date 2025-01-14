@@ -57,23 +57,11 @@ public class TutorialScript : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
                 {
-                    GraceChecker = false;
-                    GracePeriod = false;
-                    TutorialText.SetActive(false);
-                    DisposalEnemies.SetActive(false);
-                    TintedEnemies.SetActive(false);
-                    TutorialPrompt.SetActive(false);
-                    TutorialContinuePrompt.SetActive(false);
-                    GM.NewGame();
-                    GM.MenusToggleOff(GM.TutorialObjects);
+                    ShowTutorial();
                 }
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    GraceChecker = false;
-                    GracePeriod = false;
-                    TutorialStage = 10;
-                    TutorialPrompt.SetActive(false);
-                    StartCoroutine(UpdateProceedTutorial());
+                    SkipTutorial();
                 }
             }
         }
@@ -87,7 +75,7 @@ public class TutorialScript : MonoBehaviour
             }
             if (GracePeriod)
             {
-                if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
+                if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4)|| Input.GetMouseButtonDown(0))
                 {
                     GraceChecker = false;
                     GracePeriod = false;
@@ -219,4 +207,22 @@ public class TutorialScript : MonoBehaviour
 
         GracePeriod = true;
     }
+    public void ShowTutorial(){
+                        GraceChecker = false;
+                    GracePeriod = false;
+                    TutorialText.SetActive(false);
+                    DisposalEnemies.SetActive(false);
+                    TintedEnemies.SetActive(false);
+                    TutorialPrompt.SetActive(false);
+                    TutorialContinuePrompt.SetActive(false);
+                    GM.NewGame();
+                    GM.MenusToggleOff(GM.TutorialObjects);
+}
+    public void SkipTutorial(){
+                    GraceChecker = false;
+                GracePeriod = false;
+                TutorialStage = 10;
+                TutorialPrompt.SetActive(false);
+                StartCoroutine(UpdateProceedTutorial());
+}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -247,9 +248,11 @@ public GameObject[] buttons;
     private void Update()
     {
 
-        if (MenuUI.activeSelf)
+        if (MenuUI.activeSelf){
+
             if (Input.GetKeyDown(KeyCode.Escape))
                 ExitGame();
+        }
 
         if (ratingUI.activeSelf)
         {
@@ -351,21 +354,11 @@ public GameObject[] buttons;
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
                 {
-                    MenusToggleOn(KeyboardUI);
-                    MenusToggleOff(TutorialUI);
-                    KeyboardButton.onClick.AddListener(StartTutorial);
-                    audioManager.Play("Confirm");
-                    GraceChecker = false;
-                    GracePeriod = false;
+                    ShowTutorial();
                 }
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    MenusToggleOn(KeyboardUI);
-                    MenusToggleOff(TutorialUI);
-                    KeyboardButton.onClick.AddListener(NewGame);
-                    audioManager.Play("Confirm");
-                    GraceChecker = false;
-                    GracePeriod = false;
+                    SkipTutorial();
                 }
             }
         }
@@ -381,11 +374,7 @@ public GameObject[] buttons;
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    MenusToggleOn(MenuUI);
-                    MenusToggleOff(AboutUI);
-                    audioManager.Play("Back");
-                    GraceChecker = false;
-                    GracePeriod = false;
+                    ReturnButton(AboutUI);
                 }
 
             }
@@ -423,11 +412,7 @@ public GameObject[] buttons;
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    MenusToggleOn(MenuUI);
-                    MenusToggleOff(CreditsUI);
-                    audioManager.Play("Back");
-                    GraceChecker = false;
-                    GracePeriod = false;
+                    ReturnButton(CreditsUI);
                 }
 
             }
@@ -563,16 +548,7 @@ public GameObject[] buttons;
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button5) || Input.GetKeyDown(KeyCode.Alpha6))
             {
-                if (MusicMuted)
-                {
-                    MusicMuted = false;
-                    audioManager.ToggleMusic(MusicMuted);
-                }
-                else
-                {
-                    MusicMuted = true;
-                    audioManager.ToggleMusic(MusicMuted);
-                }
+                ToggleMusicButton();
             }
 
             if (Input.GetKey(KeyCode.Q) && Input.GetKey(KeyCode.P) && Input.GetKey(KeyCode.B))
@@ -592,25 +568,12 @@ public GameObject[] buttons;
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    MenusToggleOff(Stage2TutorialUI);
-                    MenusToggleOn(Stage2UI);
-                    audioManager.Play("Confirm");
-                    GraceChecker = false;
-                    GracePeriod = false;
+                    SkipTutorialStage2();
+                    
                 }
                 if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
                 {
-                    Stage2TutorialObjects.SetActive(true);
-
-                    foreach (Transform item in toggleOnGO)
-                    {
-                        item.gameObject.SetActive(false);
-                    }
-
-                    audioManager.Play("Confirm");
-                    MenusToggleOff(Stage2TutorialUI);
-                    GraceChecker = false;
-                    GracePeriod = false;
+                    ShowTutorialStage2();
                 }
             }
         }
@@ -626,30 +589,11 @@ public GameObject[] buttons;
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    MenusToggleOff(Stage2UI);
-
-                    foreach (Transform item in toggleOnGO)
-                    {
-                        item.gameObject.SetActive(true);
-                    }
-
-                    PauseTimers = false;
-                    audioManager.Play("Confirm");
-                    NewRound();
-                    GraceChecker = false;
-                    GracePeriod = false;
+                    SkipTipsPromptStage2();
                 }
                 if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
                 {
-                    Stage2Tips.SetActive(true);
-                    foreach (Transform item in toggleOnGO)
-                    {
-                        item.gameObject.SetActive(false);
-                    }
-                    audioManager.Play("Confirm");
-                    MenusToggleOff(Stage2UI);
-                    GraceChecker = false;
-                    GracePeriod = false;
+                    ShowTipsPromptStage2();
                 }
             }
         }
@@ -665,16 +609,7 @@ public GameObject[] buttons;
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    Stage2Tips.SetActive(false);
-                    foreach (Transform item in toggleOnGO)
-                    {
-                        item.gameObject.SetActive(true);
-                    }
-                    PauseTimers = false;
-                    NewRound();
-                    audioManager.Play("Back");
-                    GraceChecker = false;
-                    GracePeriod = false;
+                    ShowTipsStage2();
                 }
             }
         }
@@ -912,7 +847,101 @@ public GameObject[] buttons;
     {
         Toggle.SetActive(true);
     }
+    public void ShowTutorial(){
+                    MenusToggleOn(KeyboardUI);
+                    MenusToggleOff(TutorialUI);
+                    KeyboardButton.onClick.AddListener(StartTutorial);
+                    audioManager.Play("Confirm");
+                    GraceChecker = false;
+                    GracePeriod = false;
+    }
+    public void ShowTutorialStage2(){
+                    Stage2TutorialObjects.SetActive(true);
 
+                    foreach (Transform item in toggleOnGO)
+                    {
+                        item.gameObject.SetActive(false);
+                    }
+
+                    audioManager.Play("Confirm");
+                    MenusToggleOff(Stage2TutorialUI);
+                    GraceChecker = false;
+                    GracePeriod = false;
+    }
+
+    public void SkipTipsPromptStage2(){
+                            MenusToggleOff(Stage2UI);
+
+                    foreach (Transform item in toggleOnGO)
+                    {
+                        item.gameObject.SetActive(true);
+                    }
+
+                    PauseTimers = false;
+                    audioManager.Play("Confirm");
+                    NewRound();
+                    GraceChecker = false;
+                    GracePeriod = false;
+    }
+    public void ShowTipsPromptStage2(){
+                    Stage2Tips.SetActive(true);
+                    foreach (Transform item in toggleOnGO)
+                    {
+                        item.gameObject.SetActive(false);
+                    }
+                    audioManager.Play("Confirm");
+                    MenusToggleOff(Stage2UI);
+                    GraceChecker = false;
+                    GracePeriod = false;
+    }
+    public void ShowTipsStage2(){
+                            Stage2Tips.SetActive(false);
+                    foreach (Transform item in toggleOnGO)
+                    {
+                        item.gameObject.SetActive(true);
+                    }
+                    PauseTimers = false;
+                    NewRound();
+                    audioManager.Play("Back");
+                    GraceChecker = false;
+                    GracePeriod = false;
+    }
+
+    public void SkipTutorial(){
+                    MenusToggleOn(KeyboardUI);
+                    MenusToggleOff(TutorialUI);
+                    KeyboardButton.onClick.AddListener(NewGame);
+                    audioManager.Play("Confirm");
+                    GraceChecker = false;
+                    GracePeriod = false;
+    }
+    public void SkipTutorialStage2(){
+                            MenusToggleOff(Stage2TutorialUI);
+                    MenusToggleOn(Stage2UI);
+                    audioManager.Play("Confirm");
+                    GraceChecker = false;
+                    GracePeriod = false;
+    }
+    public void ToggleMusicButton(){
+                        if (MusicMuted)
+                {
+                    MusicMuted = false;
+                    audioManager.ToggleMusic(MusicMuted);
+                }
+                else
+                {
+                    MusicMuted = true;
+                    audioManager.ToggleMusic(MusicMuted);
+                }
+    }
+
+public void ReturnButton(GameObject toggle){
+                       MenusToggleOn(MenuUI);
+                    MenusToggleOff(toggle);
+                    audioManager.Play("Back");
+                    GraceChecker = false;
+                    GracePeriod = false;
+}
     public void ExitGame()
     {
         Application.Quit(0);

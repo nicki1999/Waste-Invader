@@ -35,7 +35,32 @@ public class Stage2Tutorial : MonoBehaviour
         GracePeriod = false;
         TutorialStage = 0;
     }
+    public void ShowTutorialPromptStage2(){
+                            GraceChecker = false;
+                    GracePeriod = false;
+                    TutorialText.SetActive(false);
+                    TutorialPrompt.SetActive(false);
+                    TutorialContinuePrompt.SetActive(false);
+                    GM.WatchedStage2Tutorial = true;
+                    GM.TutorialsWatched++;
+                    PlayerPrefs.SetInt("TutorialsWatched", GM.TutorialsWatched);
+                    GM.StatTrackerStats[5].text = GM.TutorialsWatched.ToString();
 
+                    GM.MenusToggleOn(GM.Stage2UI);
+                    GM.MenusToggleOff(GM.Stage2TutorialObjects);
+    }
+    public void SkipTutorialPromptStage2(){
+                            GraceChecker = false;
+                    GracePeriod = false;
+                    TutorialStage = 0;
+                    TutorialPrompt.SetActive(false);
+                    StartCoroutine(UpdateProceedTutorial());
+    }
+public void SkipTutorialStage2(){
+                        GraceChecker = false;
+                    GracePeriod = false;
+                    StartCoroutine(UpdateProceedTutorial());
+}
     void Update()
     {
         if (TutorialPrompt.activeSelf)
@@ -49,26 +74,11 @@ public class Stage2Tutorial : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
                 {
-                    GraceChecker = false;
-                    GracePeriod = false;
-                    TutorialText.SetActive(false);
-                    TutorialPrompt.SetActive(false);
-                    TutorialContinuePrompt.SetActive(false);
-                    GM.WatchedStage2Tutorial = true;
-                    GM.TutorialsWatched++;
-                    PlayerPrefs.SetInt("TutorialsWatched", GM.TutorialsWatched);
-                    GM.StatTrackerStats[5].text = GM.TutorialsWatched.ToString();
-
-                    GM.MenusToggleOn(GM.Stage2UI);
-                    GM.MenusToggleOff(GM.Stage2TutorialObjects);
+ShowTutorialPromptStage2();
                 }
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    GraceChecker = false;
-                    GracePeriod = false;
-                    TutorialStage = 0;
-                    TutorialPrompt.SetActive(false);
-                    StartCoroutine(UpdateProceedTutorial());
+                    SkipTutorialStage2();
                 }
             }
         }
@@ -82,11 +92,9 @@ public class Stage2Tutorial : MonoBehaviour
             }
             if (GracePeriod)
             {
-                if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
+                if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4) || Input.GetMouseButtonDown(0))
                 {
-                    GraceChecker = false;
-                    GracePeriod = false;
-                    StartCoroutine(UpdateProceedTutorial());
+                    SkipTutorialStage2();
                 }
             }
         }
