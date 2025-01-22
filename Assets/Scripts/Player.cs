@@ -46,6 +46,9 @@ public class Player : MonoBehaviour
     public GameManager gameManager;
 
     public bool Tutorial = true;
+    private bool leftArrowClicked = false;
+    private bool rightArrowClicked = false;
+
 
     private void Awake()
     {
@@ -56,30 +59,45 @@ public class Player : MonoBehaviour
     {
         InvokeRepeating(nameof(AnimatePlayer), animationSpeed, animationSpeed);
     }
-
+    public void MoveLeftButton()
+    {
+        leftArrowClicked = true;
+    }
+    public void MoveLeftButtonStop()
+    {
+        leftArrowClicked = false;
+    }
+    // Handles movement and shooting
+    public void MoveRightButton()
+    {
+        rightArrowClicked = true;
+    }
+    public void MoveRightButtonStop()
+    {
+        rightArrowClicked = false;
+    }
     // Handles movement and shooting
     private void Update()
     {
         Vector3 position = transform.position;
 
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") < -0.25f)
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") < -0.25f || leftArrowClicked)
         {
             position.x -= speed * Time.deltaTime;
-            movingLeft = true;
             moving = true;
         }
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") > 0.25f)
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") > 0.25f || rightArrowClicked)
         {
             position.x += speed * Time.deltaTime;
-            movingLeft = false;
             moving = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") == 0)
+        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") == 0 || leftArrowClicked == false)
         {
             moving = false;
+            movingLeft = false;
         }
-        else if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetAxis("Horizontal") == 0)
+        else if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetAxis("Horizontal") == 0 || rightArrowClicked == false)
         {
             moving = false;
         }
@@ -299,12 +317,13 @@ public class Player : MonoBehaviour
         healthSlider.value = Health;
     }
 
-public void FireWeaponButton(int selectedWeapon, string audioType){
+    public void FireWeaponButton(int selectedWeapon, string audioType)
+    {
         this.selectedWeapon = selectedWeapon;
-            if (!laserActive)
-                audioManager.Play(audioType);
-            Shoot();
-}
+        if (!laserActive)
+            audioManager.Play(audioType);
+        Shoot();
+    }
     private IEnumerator FlashPlayer()
     {
         if (flashing)
