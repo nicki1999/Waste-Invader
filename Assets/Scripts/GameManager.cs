@@ -50,7 +50,8 @@ public sealed class GameManager : MonoBehaviour
     public Material TutorialSkybox;
 
     public GameObject[] buttons;
-
+    public GameObject LeftButtonContainer;
+    public GameObject RightButtonContainer;
 
     private bool AFKCheck;
     private bool IdleCheck;
@@ -625,7 +626,7 @@ public sealed class GameManager : MonoBehaviour
         {
             Button[] conditionalButtons = InGameUI.GetComponentsInChildren<Button>(true);
             // buttons that need to be disabled for stage 1
-            String[] disableButtons = new string[] { "button_yellow", "button_blue", "button_brown", "button_black" };
+            String[] disableButtons = new string[] { "button_yellow", "button_blue", "button_brown", "button_purple" };
             if (Stage == 1)
             {
                 foreach (Button button in conditionalButtons)
@@ -639,6 +640,7 @@ public sealed class GameManager : MonoBehaviour
                         }
                     }
                 }
+
             }
             else if (Stage == 2)
             {
@@ -653,6 +655,9 @@ public sealed class GameManager : MonoBehaviour
                         }
                     }
                 }
+                LeftButtonContainer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bg_menu_scores");
+                RightButtonContainer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bg_menu_credits");
+
             }
 
             if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
