@@ -147,9 +147,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 06000000
+  Stage1EnemyType: 08000000
   Stage2EnemyType: 0500000007000000
   animationImages:
   - {fileID: 21300000, guid: f430e3bd5b3efe24ab5645c36bd66c88, type: 3}
   animationTime: 1
   EnemyName: Teddy Bear
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0

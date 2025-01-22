@@ -4,6 +4,7 @@ public class EnemyController : MonoBehaviour
 {
     public Enemy[] Stage1Enemies = new Enemy[1];
     public Enemy[] TintedEnemies = new Enemy[1];
+    public Enemy[] TintedEnemiesStage1 = new Enemy[1];
     public Enemy[] Stage2Enemies = new Enemy[1];
 
     public AnimationCurve Speed = new AnimationCurve();
@@ -17,7 +18,7 @@ public class EnemyController : MonoBehaviour
     public int NumberAlive => TotalEnemies - NumberKilled;
     public int TotalEnemies => rows * columns;
     public float PercentKilled => (float)NumberKilled / (float)TotalEnemies;
-private float slowdownFactor = 0.3f; 
+    private float slowdownFactor = 0.3f;
     public int rows = 5;
     public int columns = 11;
 
@@ -48,43 +49,47 @@ private float slowdownFactor = 0.3f;
                 {
                     if (Random.Range(1, 101) <= gameManager.TintedEnemyChance)
                     {
-                        enemy = Instantiate(TintedEnemies[Random.Range(0, TintedEnemies.Length)], transform);
-                        Color enemyColor = new Color();
-                        if (enemy.Stage1EnemyType[0] == 1)
-                        {
-                            enemyColor = new Color(255f / 255f, 0f / 255f, 0f / 255f, 1);
-                        }
-                        else if (enemy.Stage1EnemyType[0] == 2)
-                        {
-                            enemyColor = new Color(255f / 255f, 153f / 255f, 0f / 255f, 1);
-                        }
-                        else if (enemy.Stage1EnemyType[0] == 3)
-                        {
-                            enemyColor = new Color(255f / 255f, 255f / 255f, 0f / 255f, 1);
-                        }
-                        else if (enemy.Stage1EnemyType[0] == 4)
-                        {
-                            enemyColor = new Color(0f / 255f, 255f / 255f, 0f / 255f, 1);
-                        }
-                        else if (enemy.Stage1EnemyType[0] == 5)
-                        {
-                            enemyColor = new Color(74f / 255f, 134f / 255f, 232f / 255f, 1);
-                        }
-                        else if (enemy.Stage1EnemyType[0] == 6)
-                        {
-                            enemyColor = new Color(153f / 255f, 0f / 255f, 255f / 255f, 1);
-                            enemy.GetComponent<Enemy>().Stage1EnemyType[0] = 8;
-                        }
-                        else if (enemy.Stage1EnemyType[0] == 7)
-                        {
-                            enemyColor = new Color(232f / 255f, 202f / 255f, 142f / 255f, 1);
-                        }
-                        else if (enemy.Stage1EnemyType[0] == 8)
-                        {
-                            enemyColor = new Color(1f, 1f, 1f, 1);
-                        }
+                        enemy = Instantiate(TintedEnemiesStage1[Random.Range(0, TintedEnemiesStage1.Length)], transform);
+                        // while (enemy.Stage1EnemyType[0] == 3 || enemy.Stage1EnemyType[0] == 5 || enemy.Stage1EnemyType[0] == 7 || enemy.Stage1EnemyType[0] == 8)
+                        // {
+                        //     enemy = Instantiate(TintedEnemies[Random.Range(0, TintedEnemies.Length)], transform);
+                        // }
+                        // Color enemyColor = new Color();
+                        // if (enemy.Stage1EnemyType[0] == 1)
+                        // {
+                        //     enemyColor = new Color(255f / 255f, 0f / 255f, 0f / 255f, 1);
+                        // }
+                        // else if (enemy.Stage1EnemyType[0] == 2)
+                        // {
+                        //     enemyColor = new Color(255f / 255f, 153f / 255f, 0f / 255f, 1);
+                        // }
+                        // else if (enemy.Stage1EnemyType[0] == 3)
+                        // {
+                        //     enemyColor = new Color(255f / 255f, 255f / 255f, 0f / 255f, 1);
+                        // }
+                        // else if (enemy.Stage1EnemyType[0] == 4)
+                        // {
+                        //     enemyColor = new Color(0f / 255f, 255f / 255f, 0f / 255f, 1);
+                        // }
+                        // else if (enemy.Stage1EnemyType[0] == 5)
+                        // {
+                        //     enemyColor = new Color(74f / 255f, 134f / 255f, 232f / 255f, 1);
+                        // }
+                        // else if (enemy.Stage1EnemyType[0] == 6)
+                        // {
+                        //     enemyColor = new Color(153f / 255f, 0f / 255f, 255f / 255f, 1);
+                        //     enemy.GetComponent<Enemy>().Stage1EnemyType[0] = 8;
+                        // }
+                        // else if (enemy.Stage1EnemyType[0] == 7)
+                        // {
+                        //     enemyColor = new Color(232f / 255f, 202f / 255f, 142f / 255f, 1);
+                        // }
+                        // else if (enemy.Stage1EnemyType[0] == 8)
+                        // {
+                        //     enemyColor = new Color(1f, 1f, 1f, 1);
+                        // }
 
-                        enemy.GetComponent<SpriteRenderer>().color = enemyColor;
+                        // enemy.GetComponent<SpriteRenderer>().color = enemyColor;
                     }
                     else
                     {
@@ -176,7 +181,7 @@ private float slowdownFactor = 0.3f;
         direction = Vector3.right;
         transform.position = initialPos;
 
-        foreach (Transform invader in transform) 
+        foreach (Transform invader in transform)
         {
             Destroy(invader.gameObject);
         }

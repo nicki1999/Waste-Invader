@@ -49,7 +49,7 @@ public sealed class GameManager : MonoBehaviour
     public Material NightSkybox;
     public Material TutorialSkybox;
 
-public GameObject[] buttons;
+    public GameObject[] buttons;
 
 
     private bool AFKCheck;
@@ -248,7 +248,8 @@ public GameObject[] buttons;
     private void Update()
     {
 
-        if (MenuUI.activeSelf){
+        if (MenuUI.activeSelf)
+        {
 
             if (Input.GetKeyDown(KeyCode.Escape))
                 ExitGame();
@@ -569,7 +570,7 @@ public GameObject[] buttons;
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
                     SkipTutorialStage2();
-                    
+
                 }
                 if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
                 {
@@ -625,61 +626,134 @@ public GameObject[] buttons;
             Button[] conditionalButtons = InGameUI.GetComponentsInChildren<Button>(true);
             // buttons that need to be disabled for stage 1
             String[] disableButtons = new string[] { "button_yellow", "button_blue", "button_brown", "button_black" };
-                    if ( Stage == 1){
-                          foreach(Button button in conditionalButtons){
-                foreach (string disableButton in disableButtons)
+            if (Stage == 1)
             {
-                if (button.name.Contains(disableButton))
+                foreach (Button button in conditionalButtons)
                 {
-                    button.interactable = false;  
-                    button.gameObject.SetActive(false); 
+                    foreach (string disableButton in disableButtons)
+                    {
+                        if (button.name.Contains(disableButton))
+                        {
+                            button.interactable = false;
+                            button.gameObject.SetActive(false);
+                        }
+                    }
                 }
             }
-            }
-                    }
-                    else if (Stage == 2){
-                        foreach(Button button in conditionalButtons){
-                foreach (string disableButton in disableButtons)
+            else if (Stage == 2)
             {
-                if (button.name.Contains(disableButton))
+                foreach (Button button in conditionalButtons)
                 {
-                    button.interactable = true;  
-                    button.gameObject.SetActive(true); 
+                    foreach (string disableButton in disableButtons)
+                    {
+                        if (button.name.Contains(disableButton))
+                        {
+                            button.interactable = true;
+                            button.gameObject.SetActive(true);
+                        }
+                    }
                 }
             }
-            }
-                    }
-        
-            if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1)){
+
+            if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
+            {
                 TriggerButtonAnimation("button_red");
             }
-            else if (Input.GetKeyDown(KeyCode.Joystick1Button1) || Input.GetKeyDown(KeyCode.Alpha2)){
+            else if (Input.GetKeyDown(KeyCode.Joystick1Button1) || Input.GetKeyDown(KeyCode.Alpha2))
+            {
                 TriggerButtonAnimation("button_orange");
             }
-            else if (Input.GetKeyDown(KeyCode.Joystick1Button2) || Input.GetKeyDown(KeyCode.Alpha3)){
+            else if (Input.GetKeyDown(KeyCode.Joystick1Button2) || Input.GetKeyDown(KeyCode.Alpha3))
+            {
                 TriggerButtonAnimation("button_yellow");
             }
-            else if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4)){
+            else if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
+            {
                 TriggerButtonAnimation("button_green");
             }
-                        else if (Input.GetKeyDown(KeyCode.Joystick1Button4) || Input.GetKeyDown(KeyCode.Alpha5)){
+            else if (Input.GetKeyDown(KeyCode.Joystick1Button4) || Input.GetKeyDown(KeyCode.Alpha5))
+            {
                 TriggerButtonAnimation("button_blue");
             }
-                        else if (Input.GetKeyDown(KeyCode.Joystick1Button5) || Input.GetKeyDown(KeyCode.Alpha6)){
-                TriggerButtonAnimation("button_purple");
+            else if (Input.GetKeyDown(KeyCode.Joystick1Button5) || Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                TriggerButtonAnimation("button_purple_exception");
             }
-                        else if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Joystick1Button6)){
+            else if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Joystick1Button6))
+            {
                 TriggerButtonAnimation("button_brown");
             }
-                        else if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Joystick1Button7)){
+            else if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Joystick1Button7))
+            {
                 TriggerButtonAnimation("button_black");
             }
         }
-        void TriggerButtonAnimation(string buttonBaseName){
-            GameObject button = FindButtonByName(buttonBaseName);
-            if(button != null){
-                Image buttonImage = button.GetComponent<Image>();
-                 if (buttonImage != null)
+
+    }
+    public void TriggerButtonAnimation(string buttonBaseName)
+    {
+        int selectedWeapon = 0;
+        string audioType = "";
+        if (buttonBaseName == "button_red")
+        {
+            selectedWeapon = 0;
+            audioType = "Shoot1";
+        }
+        else if (buttonBaseName == "button_orange")
+        {
+            selectedWeapon = 1;
+            audioType = "Shoot2";
+        }
+        else if (buttonBaseName == "button_yellow")
+        {
+            selectedWeapon = 2;
+            audioType = "Shoot2";
+        }
+        else if (buttonBaseName == "button_green")
+        {
+            selectedWeapon = 3;
+            audioType = "Shoot4";
+        }
+        else if (buttonBaseName == "button_blue")
+        {
+            selectedWeapon = 4;
+            audioType = "Shoot5";
+        }
+        else if (buttonBaseName == "button_purple_exception")
+        {
+            selectedWeapon = 5;
+            audioType = "Shoot6";
+            buttonBaseName = "button_purple_exception";
+
+        }
+
+        else if (buttonBaseName == "button_purple")
+        {
+            selectedWeapon = 7;
+            audioType = "Shoot6";
+        }
+        else if (buttonBaseName == "button_brown")
+        {
+            selectedWeapon = 6;
+            audioType = "Shoot7";
+        }
+        else if (buttonBaseName == "button_black")
+        {
+            selectedWeapon = 7;
+            audioType = "Shoot8";
+        }
+
+        TriggerButton(buttonBaseName, selectedWeapon, audioType);
+    }
+    void TriggerButton(string buttonBaseName, int selectedWeapon, string audioType)
+    {
+        Debug.Log($"Triggering button {selectedWeapon}");
+        this.player.FireWeaponButton(selectedWeapon, audioType);
+        GameObject button = FindButtonByName(buttonBaseName);
+        if (button != null)
+        {
+            Image buttonImage = button.GetComponent<Image>();
+            if (buttonImage != null)
             {
                 Sprite idleSprite = LoadSprite($"{buttonBaseName}_1");
                 Sprite halfPressedSprite = LoadSprite($"{buttonBaseName}_2");
@@ -687,21 +761,24 @@ public GameObject[] buttons;
 
                 StartCoroutine(AnimateButton(buttonImage, idleSprite, halfPressedSprite, fullyPressedSprite));
             }
+        }
+    }
+    GameObject FindButtonByName(string buttonBaseName)
+    {
+        foreach (GameObject button in buttons)
+        {
+            if (button.name.Contains(buttonBaseName))
+            {
+                return button;
             }
-            
         }
-        GameObject FindButtonByName(string buttonBaseName){
-            foreach(GameObject button in buttons){
-                if(button.name.Contains(buttonBaseName)){
-                    return button;
-                }
-            }
-            return null;
-        }
-        Sprite LoadSprite(string spriteName){
-            return Resources.Load<Sprite>($"Sprites/temp/ui/{spriteName}");
-        }
-         System.Collections.IEnumerator AnimateButton(Image buttonImage, Sprite idleSprite, Sprite halfPressedSprite, Sprite fullyPressedSprite)
+        return null;
+    }
+    Sprite LoadSprite(string spriteName)
+    {
+        return Resources.Load<Sprite>($"Sprites/temp/ui/{spriteName}");
+    }
+    System.Collections.IEnumerator AnimateButton(Image buttonImage, Sprite idleSprite, Sprite halfPressedSprite, Sprite fullyPressedSprite)
     {
         // Half-pressed
         buttonImage.sprite = halfPressedSprite;
@@ -714,8 +791,6 @@ public GameObject[] buttons;
         // Back to idle
         buttonImage.sprite = idleSprite;
     }
-    }
-
     private void MainMenu()
     {
         foreach (Transform item in toggleOnGO)
@@ -847,101 +922,110 @@ public GameObject[] buttons;
     {
         Toggle.SetActive(true);
     }
-    public void ShowTutorial(){
-                    MenusToggleOn(KeyboardUI);
-                    MenusToggleOff(TutorialUI);
-                    KeyboardButton.onClick.AddListener(StartTutorial);
-                    audioManager.Play("Confirm");
-                    GraceChecker = false;
-                    GracePeriod = false;
+    public void ShowTutorial()
+    {
+        MenusToggleOn(KeyboardUI);
+        MenusToggleOff(TutorialUI);
+        KeyboardButton.onClick.AddListener(StartTutorial);
+        audioManager.Play("Confirm");
+        GraceChecker = false;
+        GracePeriod = false;
     }
-    public void ShowTutorialStage2(){
-                    Stage2TutorialObjects.SetActive(true);
+    public void ShowTutorialStage2()
+    {
+        Stage2TutorialObjects.SetActive(true);
 
-                    foreach (Transform item in toggleOnGO)
-                    {
-                        item.gameObject.SetActive(false);
-                    }
+        foreach (Transform item in toggleOnGO)
+        {
+            item.gameObject.SetActive(false);
+        }
 
-                    audioManager.Play("Confirm");
-                    MenusToggleOff(Stage2TutorialUI);
-                    GraceChecker = false;
-                    GracePeriod = false;
-    }
-
-    public void SkipTipsPromptStage2(){
-                            MenusToggleOff(Stage2UI);
-
-                    foreach (Transform item in toggleOnGO)
-                    {
-                        item.gameObject.SetActive(true);
-                    }
-
-                    PauseTimers = false;
-                    audioManager.Play("Confirm");
-                    NewRound();
-                    GraceChecker = false;
-                    GracePeriod = false;
-    }
-    public void ShowTipsPromptStage2(){
-                    Stage2Tips.SetActive(true);
-                    foreach (Transform item in toggleOnGO)
-                    {
-                        item.gameObject.SetActive(false);
-                    }
-                    audioManager.Play("Confirm");
-                    MenusToggleOff(Stage2UI);
-                    GraceChecker = false;
-                    GracePeriod = false;
-    }
-    public void ShowTipsStage2(){
-                            Stage2Tips.SetActive(false);
-                    foreach (Transform item in toggleOnGO)
-                    {
-                        item.gameObject.SetActive(true);
-                    }
-                    PauseTimers = false;
-                    NewRound();
-                    audioManager.Play("Back");
-                    GraceChecker = false;
-                    GracePeriod = false;
+        audioManager.Play("Confirm");
+        MenusToggleOff(Stage2TutorialUI);
+        GraceChecker = false;
+        GracePeriod = false;
     }
 
-    public void SkipTutorial(){
-                    MenusToggleOn(KeyboardUI);
-                    MenusToggleOff(TutorialUI);
-                    KeyboardButton.onClick.AddListener(NewGame);
-                    audioManager.Play("Confirm");
-                    GraceChecker = false;
-                    GracePeriod = false;
+    public void SkipTipsPromptStage2()
+    {
+        MenusToggleOff(Stage2UI);
+
+        foreach (Transform item in toggleOnGO)
+        {
+            item.gameObject.SetActive(true);
+        }
+
+        PauseTimers = false;
+        audioManager.Play("Confirm");
+        NewRound();
+        GraceChecker = false;
+        GracePeriod = false;
     }
-    public void SkipTutorialStage2(){
-                            MenusToggleOff(Stage2TutorialUI);
-                    MenusToggleOn(Stage2UI);
-                    audioManager.Play("Confirm");
-                    GraceChecker = false;
-                    GracePeriod = false;
+    public void ShowTipsPromptStage2()
+    {
+        Stage2Tips.SetActive(true);
+        foreach (Transform item in toggleOnGO)
+        {
+            item.gameObject.SetActive(false);
+        }
+        audioManager.Play("Confirm");
+        MenusToggleOff(Stage2UI);
+        GraceChecker = false;
+        GracePeriod = false;
     }
-    public void ToggleMusicButton(){
-                        if (MusicMuted)
-                {
-                    MusicMuted = false;
-                    audioManager.ToggleMusic(MusicMuted);
-                }
-                else
-                {
-                    MusicMuted = true;
-                    audioManager.ToggleMusic(MusicMuted);
-                }
+    public void ShowTipsStage2()
+    {
+        Stage2Tips.SetActive(false);
+        foreach (Transform item in toggleOnGO)
+        {
+            item.gameObject.SetActive(true);
+        }
+        PauseTimers = false;
+        NewRound();
+        audioManager.Play("Back");
+        GraceChecker = false;
+        GracePeriod = false;
     }
 
-public void ReturnButton(GameObject toggle){
-                       MenusToggleOn(MenuUI);
-                    MenusToggleOff(toggle);
-                    audioManager.Play("Back");
-                    GraceChecker = false;
-                    GracePeriod = false;
-}
+    public void SkipTutorial()
+    {
+        MenusToggleOn(KeyboardUI);
+        MenusToggleOff(TutorialUI);
+        KeyboardButton.onClick.AddListener(NewGame);
+        audioManager.Play("Confirm");
+        GraceChecker = false;
+        GracePeriod = false;
+    }
+    public void SkipTutorialStage2()
+    {
+        MenusToggleOff(Stage2TutorialUI);
+        MenusToggleOn(Stage2UI);
+        audioManager.Play("Confirm");
+        GraceChecker = false;
+        GracePeriod = false;
+    }
+    public void ToggleMusicButton()
+    {
+        if (MusicMuted)
+        {
+            MusicMuted = false;
+            audioManager.ToggleMusic(MusicMuted);
+        }
+        else
+        {
+            MusicMuted = true;
+            audioManager.ToggleMusic(MusicMuted);
+        }
+    }
+
+    public void ReturnButton(GameObject toggle)
+    {
+        MenusToggleOn(MenuUI);
+        MenusToggleOff(toggle);
+        audioManager.Play("Back");
+        GraceChecker = false;
+        GracePeriod = false;
+    }
     public void ExitGame()
     {
         Application.Quit(0);
@@ -964,7 +1048,6 @@ public void ReturnButton(GameObject toggle){
         player.transform.position = position;
         player.Health = player.maxHealth;
         player.gameObject.SetActive(true);
-
         player.healthSlider.value = player.Health;
     }
 

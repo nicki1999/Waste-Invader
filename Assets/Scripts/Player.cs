@@ -254,7 +254,7 @@ public class Player : MonoBehaviour
     }
 
     // Shoots a laser if one does not already exist
-    private void Shoot()
+    public void Shoot()
     {
         shooting = true;
         if (!laserActive)
@@ -299,6 +299,12 @@ public class Player : MonoBehaviour
         healthSlider.value = Health;
     }
 
+public void FireWeaponButton(int selectedWeapon, string audioType){
+        this.selectedWeapon = selectedWeapon;
+            if (!laserActive)
+                audioManager.Play(audioType);
+            Shoot();
+}
     private IEnumerator FlashPlayer()
     {
         if (flashing)
