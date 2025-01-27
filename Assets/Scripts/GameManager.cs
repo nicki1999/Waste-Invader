@@ -656,7 +656,7 @@ public sealed class GameManager : MonoBehaviour
                     }
                 }
                 LeftButtonContainer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bg_menu_scores");
-                RightButtonContainer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bg_menu_credits");
+                RightButtonContainer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bg_menu_scores");
 
             }
 
