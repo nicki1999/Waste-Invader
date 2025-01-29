@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -28,6 +29,11 @@ public class EnemyController : MonoBehaviour
     private bool bottomCheck = false;
 
     public GameManager gameManager;
+    public string targetColorHex = "#BC2727"; // Hex color string to set the skybox color.
+    private Color originalColor;    // To store the original color of the skybox.
+    private Color targetColor;
+
+
 
     // Initial spawn of enemies
     private void Awake()
@@ -120,6 +126,29 @@ public class EnemyController : MonoBehaviour
         {
             if (!enemy.gameObject.activeInHierarchy)
                 continue;
+
+            Enemy enemyTransform = enemy.GetComponent<Enemy>();
+
+            if (enemyTransform == null)
+            {
+                continue;
+            }
+            if (enemyTransform.countWrongHit >= 2)
+            {
+                if (gameManager.DaySkybox != null)
+                {
+                    originalColor = gameManager.DaySkybox.GetColor("_Tint");
+                    if (ColorUtility.TryParseHtmlString(targetColorHex, out targetColor))
+                    {
+                        // Start the coroutine to change the color to the target color for 2 seconds.
+                        StartCoroutine(ChangeSkyboxColorTemporarily(targetColor, 2f));
+                    }
+                }
+                enemyTransform.countWrongHit = 0;
+                // Call any Game Over method here, e.g., gameManager.GameOver();
+                break;
+            }
+
             //for adding the function buttons I aded more padding to the left and right
             if (direction == Vector3.right && enemy.position.x >= (Camera.main.ViewportToWorldPoint(Vector3.right).x - 6f))
             {
@@ -143,7 +172,13 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+    private IEnumerator ChangeSkyboxColorTemporarily(Color newColor, float duration)
+    {
+        gameManager.DaySkybox.SetColor("_Tint", newColor);
+        yield return new WaitForSeconds(duration);
+        gameManager.DaySkybox.SetColor("_Tint", originalColor);
 
+    }
     // Move to the next row
     private void NextRow()
     {

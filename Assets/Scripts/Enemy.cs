@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
 
     public int PopUpMessageInt = 0;
 
+    public int countWrongHit = 0;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -60,12 +61,15 @@ public class Enemy : MonoBehaviour
                     {
                         killed?.Invoke(this);
                         hitCheck = true;
+                        countWrongHit = 0;
                     }
                 }
                 if (!hitCheck)
                 {
                     IncorrectHit?.Invoke(this);
+                    countWrongHit++;
                 }
+                // Debug.Log("WrongHit: " + countWrongHit);
             }
             else if (gameManager.Stage == 2)
             {

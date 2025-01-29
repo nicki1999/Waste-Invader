@@ -752,7 +752,7 @@ public sealed class GameManager : MonoBehaviour
     }
     void TriggerButton(string buttonBaseName, int selectedWeapon, string audioType)
     {
-        Debug.Log($"Triggering button {selectedWeapon}");
+        //Debug.Log($"Triggering button {selectedWeapon}");
         this.player.FireWeaponButton(selectedWeapon, audioType);
         GameObject button = FindButtonByName(buttonBaseName);
         if (button != null)
@@ -1370,6 +1370,10 @@ public sealed class GameManager : MonoBehaviour
 
             WaveScore = 0;
         }
+        Debug.Log("total Score: " + totalScore);
+        Debug.Log("total Waves: " + totalWaves);
+        Debug.Log("total Stage1 Score: " + totalStage1Score);
+        Debug.Log("total Stage2 Score: " + totalStage2Score);
     }
 
     private void OnEnemyIncorrectlyHit(Enemy enemy)
