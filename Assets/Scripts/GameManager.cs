@@ -111,6 +111,9 @@ public sealed class GameManager : MonoBehaviour
     // Reference death actions, and start new game
     private void Start()
     {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+
         player.killed += OnPlayerKilled;
         enemyController.killed += OnEnemyKilled;
         enemyController.IncorrectHit += OnEnemyIncorrectlyHit;
@@ -1154,15 +1157,75 @@ public sealed class GameManager : MonoBehaviour
                 for (int j = 0; j < ScoreList.Length; j++)
                 {
                     PlayerPrefs.SetString("ScoreList" + j, ScoreList[j].text);
+                    Debug.Log("ScoreList" + j + " = " + ScoreList[j].text);
                 }
                 for (int j = 0; j < WaveList.Length; j++)
                 {
                     PlayerPrefs.SetString("WaveList" + j, WaveList[j].text);
+                    Debug.Log("WaveList" + j + " = " + WaveList[j].text);
                 }
                 for (int j = 0; j < NameList.Length; j++)
                 {
                     PlayerPrefs.SetString("NameList" + j, NameList[j].text);
+                    Debug.Log("NameList" + j + " = " + NameList[j].text);
                 }
+                Debug.Log("Checking Main.Instance...");
+                if (Main.Instance == null)
+                {
+                    Debug.LogError("Main.Instance is NULL!");
+                }
+                else if (Main.Instance.web == null)
+                {
+                    Debug.LogError("Main.Instance.web is NULL!");
+                }
+                else
+                {
+                    Debug.Log("Main.Instance.web is available.");
+                }
+
+                Debug.Log("Checking UI elements...");
+                if (NameList == null || NameList.Length == 0 || NameList[0] == null)
+                {
+                    Debug.LogError("NameList[0] is NULL!");
+                }
+                else
+                {
+                    Debug.Log("NameList[0] is: " + NameList[0].text);
+                }
+
+                if (WaveList == null || WaveList.Length == 0 || WaveList[0] == null)
+                {
+                    Debug.LogError("WaveList[0] is NULL!");
+                }
+                else
+                {
+                    Debug.Log("WaveList[0] is: " + WaveList[0].text);
+                }
+
+                if (ScoreList == null || ScoreList.Length == 0 || ScoreList[0] == null)
+                {
+                    Debug.LogError("ScoreList[0] is NULL!");
+                }
+                else
+                {
+                    Debug.Log("ScoreList[0] is: " + ScoreList[0].text);
+                }
+
+                // Only start coroutine if everything is valid
+                if (Main.Instance != null && Main.Instance.web != null &&
+                    NameList != null && NameList.Length > 0 && NameList[0] != null &&
+                    WaveList != null && WaveList.Length > 0 && WaveList[0] != null &&
+                    ScoreList != null && ScoreList.Length > 0 && ScoreList[0] != null)
+                {
+                    StartCoroutine(Main.Instance.web.AddToLeaderboard(
+                        NameList[0].text, int.Parse(WaveList[0].text), int.Parse(ScoreList[0].text)));
+                }
+                else
+                {
+                    Debug.LogError("Skipping AddToLeaderboard() due to null reference.");
+                }
+
+
 
                 i += scores.Length;
             }
@@ -1370,10 +1433,6 @@ public sealed class GameManager : MonoBehaviour
 
             WaveScore = 0;
         }
-        Debug.Log("total Score: " + totalScore);
-        Debug.Log("total Waves: " + totalWaves);
-        Debug.Log("total Stage1 Score: " + totalStage1Score);
-        Debug.Log("total Stage2 Score: " + totalStage2Score);
     }
 
     private void OnEnemyIncorrectlyHit(Enemy enemy)
