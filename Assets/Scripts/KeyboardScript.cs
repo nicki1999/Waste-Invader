@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ public class KeyboardScript : MonoBehaviour
 
     public Text displayText;
     public string storedText = "";
+    public static event Action OnEnterPressed;
+
 
     public void KeyInput(string Key)
     {
@@ -24,4 +27,11 @@ public class KeyboardScript : MonoBehaviour
 
         displayText.text = storedText;
     }
+    // void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Return)) // Detect Enter key
+    //     {
+    //         OnEnterPressed?.Invoke(); // Fire the event
+    //     }
+    // }
 }

@@ -20,6 +20,7 @@ public sealed class GameManager : MonoBehaviour
     public GameObject MenuUI;
     public GameObject CreditsUI;
     public GameObject HighScoresUI;
+    public GameObject LeaderboardUI;
     public GameObject TutorialUI;
     public GameObject SettingsUI;
     public GameObject CampusUI;
@@ -87,6 +88,11 @@ public sealed class GameManager : MonoBehaviour
     public Text[] ScoreList;
     public Text[] WaveList;
     public Text[] NameList;
+    public Text[] LeaderboardScoreList;
+    public Text[] LeaderboardWaveList;
+    public Text[] LeaderboardNameList;
+    public GameObject leaderboardObject;
+
 
     private KeyCode[] sequence = new KeyCode[]
     {
@@ -108,11 +114,14 @@ public sealed class GameManager : MonoBehaviour
         enemyController = FindObjectOfType<EnemyController>();
     }
 
+
     // Reference death actions, and start new game
     private void Start()
     {
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
+        GetLeaderboard();
+
 
         player.killed += OnPlayerKilled;
         enemyController.killed += OnEnemyKilled;
@@ -254,7 +263,6 @@ public sealed class GameManager : MonoBehaviour
 
         if (MenuUI.activeSelf)
         {
-
             if (Input.GetKeyDown(KeyCode.Escape))
                 ExitGame();
         }
@@ -398,6 +406,26 @@ public sealed class GameManager : MonoBehaviour
                 {
                     MenusToggleOn(MenuUI);
                     MenusToggleOff(HighScoresUI);
+                    audioManager.Play("Back");
+                    GraceChecker = false;
+                    GracePeriod = false;
+                }
+
+            }
+        }
+        if (LeaderboardUI.activeSelf)
+        {
+            if (!GraceChecker)
+            {
+                GraceChecker = true;
+                StartCoroutine(WaitForGrace());
+            }
+            if (GracePeriod)
+            {
+                if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    MenusToggleOn(MenuUI);
+                    MenusToggleOff(LeaderboardUI);
                     audioManager.Play("Back");
                     GraceChecker = false;
                     GracePeriod = false;
@@ -810,6 +838,7 @@ public sealed class GameManager : MonoBehaviour
         MenuUI.SetActive(true);
         CreditsUI.SetActive(false);
         HighScoresUI.SetActive(false);
+        LeaderboardUI.SetActive(false);
         TutorialUI.SetActive(false);
         SettingsUI.SetActive(false);
         CampusUI.SetActive(false);
@@ -909,6 +938,8 @@ public sealed class GameManager : MonoBehaviour
                 eventSystem.SetSelectedGameObject(HighScoresUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
             else if (SettingsUI.activeSelf)
                 eventSystem.SetSelectedGameObject(SettingsUI.GetComponentInChildren<Slider>().gameObject, new BaseEventData(eventSystem));
+            else if (LeaderboardUI.activeSelf)
+                eventSystem.SetSelectedGameObject(LeaderboardUI.GetComponentInChildren<Slider>().gameObject, new BaseEventData(eventSystem));
             else if (CampusUI.activeSelf)
                 eventSystem.SetSelectedGameObject(CampusUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
             else if (RecyclingUI.activeSelf)
@@ -934,7 +965,8 @@ public sealed class GameManager : MonoBehaviour
     {
         MenusToggleOn(KeyboardUI);
         MenusToggleOff(TutorialUI);
-        KeyboardButton.onClick.AddListener(StartTutorial);
+        KeyboardButton.onClick.AddListener(() => StartCoroutine(Main.Instance.web.FilterPlayerName(Keyboard.storedText)));
+        //KeyboardButton.onClick.AddListener(StartTutorial);
         audioManager.Play("Confirm");
         GraceChecker = false;
         GracePeriod = false;
@@ -999,6 +1031,7 @@ public sealed class GameManager : MonoBehaviour
     {
         MenusToggleOn(KeyboardUI);
         MenusToggleOff(TutorialUI);
+        //KeyboardScript.OnEnterPressed += UpdatePlayerNames;
         KeyboardButton.onClick.AddListener(NewGame);
         audioManager.Play("Confirm");
         GraceChecker = false;
@@ -1217,8 +1250,10 @@ public sealed class GameManager : MonoBehaviour
                     WaveList != null && WaveList.Length > 0 && WaveList[0] != null &&
                     ScoreList != null && ScoreList.Length > 0 && ScoreList[0] != null)
                 {
-                    StartCoroutine(Main.Instance.web.AddToLeaderboard(
+                    yield return StartCoroutine(Main.Instance.web.AddToLeaderboard(
                         NameList[0].text, int.Parse(WaveList[0].text), int.Parse(ScoreList[0].text)));
+                    GetLeaderboard();
+
                 }
                 else
                 {
@@ -1281,7 +1316,49 @@ public sealed class GameManager : MonoBehaviour
         else
             StartCoroutine(GameOver());
     }
+    private void GetLeaderboard()
+    {
+        //1. assign the text to leaderboard
+        int childCount = leaderboardObject.transform.childCount;
 
+        LeaderboardScoreList = new Text[childCount];
+        LeaderboardWaveList = new Text[childCount];
+        LeaderboardNameList = new Text[childCount];
+        for (int i = 0; i < childCount; i++)
+        {
+            Transform entry = leaderboardObject.transform.GetChild(i);
+            Text scoreText = entry.Find("Score").GetComponent<Text>();
+            Text waveText = entry.Find("Wave").GetComponent<Text>();
+            Text nameText = entry.Find("Name").GetComponent<Text>();
+            // Ensure components exist before assigning
+            if (scoreText != null && waveText != null && nameText != null)
+            {
+                LeaderboardScoreList[i] = scoreText;
+                LeaderboardWaveList[i] = waveText;
+                LeaderboardNameList[i] = nameText;
+            }
+        }
+        if (Main.Instance == null)
+        {
+            Debug.LogError("Main.Instance is null!");
+            return;
+        }
+
+        if (Main.Instance.web == null)
+        {
+            Debug.LogError("Main.Instance.web is null!");
+            return;
+        }
+
+        if (LeaderboardScoreList == null || LeaderboardWaveList == null || LeaderboardNameList == null)
+        {
+            Debug.LogError("One of the leaderboard lists is null!");
+            return;
+        }
+        //3. populate the arrays with the database values
+        Debug.Log("Attempting to get leaderboard...");
+        StartCoroutine(Main.Instance.web.GetLeaderboard(LeaderboardScoreList, LeaderboardWaveList, LeaderboardNameList));
+    }
     // When an enemy dies, add score, if all dead, start next round
     private void OnEnemyKilled(Enemy enemy)
     {
@@ -1442,12 +1519,69 @@ public sealed class GameManager : MonoBehaviour
         audioManager.Play("Shoot3");
     }
 
+    // public void UpdatePlayerNames()
+    // {
+    //     CurrentPlayer = Keyboard.storedText;
+    //     Debug.Log("CurrentPlayer" + CurrentPlayer);
+    //     StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
+    //     Keyboard.storedText = "";
+    //     Keyboard.displayText.text = "";
+
     public void UpdatePlayerNames()
     {
+        // // Check if Keyboard exists
+        // if (Keyboard == null)
+        // {
+        //     Debug.LogError("Keyboard reference is null!");
+        //     return;
+        // }
+
+        // // Check if storedText is available
+        // if (string.IsNullOrEmpty(Keyboard.storedText))
+        // {
+        //     Debug.LogError("Keyboard.storedText is null or empty!");
+        //     return;
+        // }
+
+        // CurrentPlayer = Keyboard.storedText;
+        // Debug.Log("CurrentPlayer: " + CurrentPlayer);
+
+        // // Check if Main.Instance exists
+        // if (Main.Instance == null)
+        // {
+        //     Debug.LogError("Main.Instance is null! Make sure Main is initialized.");
+        //     return;
+        // }
+
+        // // Check if web exists inside Main.Instance
+        // if (Main.Instance.web == null)
+        // {
+        //     Debug.LogError("Main.Instance.web is null! Make sure web is assigned.");
+        //     return;
+        // }
+
+        // // Start the coroutine if everything is valid
+        // StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
+
+        // // Clear text if displayText exists
+        // if (Keyboard.displayText != null)
+        // {
+        //     Keyboard.displayText.text = "";
+        // }
+        // else
+        // {
+        //     Debug.LogError("Keyboard.displayText is null!");
+        // }
+
+        // Keyboard.storedText = "";
+
         CurrentPlayer = Keyboard.storedText;
         Keyboard.storedText = "";
         Keyboard.displayText.text = "";
+
     }
+
+
 
     private IEnumerator Countdown()
     {
