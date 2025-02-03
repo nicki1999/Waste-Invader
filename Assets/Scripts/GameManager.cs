@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using JetBrains.Annotations;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -1801,18 +1802,44 @@ public sealed class GameManager : MonoBehaviour
         }
 
         float duration = 5f;
+        float shakeDuration = 0.5f;
         float totalTime = 0;
+        float magnitude = 10f;
+        RectTransform rectTransform = PopUpUI.GetComponent<RectTransform>();
+        Vector3 originalPos = rectTransform.anchoredPosition;
+        Image popupImage = PopUpUI.GetComponent<Image>();
+        Color color = popupImage.color;
+        Color flashRed = new Color(199f / 255f, 70f / 255f, 70f / 255f); // #C74646 in Unity RGB
+
         PopUpUI.SetActive(true);
         PopUpText.text = message;
 
         while (totalTime <= duration)
         {
-            totalTime += Time.deltaTime;
+            if (totalTime <= shakeDuration)
+            {
+                float offsetX = Mathf.Sin(Time.time * 50f) * magnitude; // Smooth left-right shake
+                                                                        // float offsetY = UnityEngine.Random.Range(-magnitude, magnitude);
+                rectTransform.anchoredPosition = originalPos + new Vector3(offsetX, 0, 0);
+
+
+                float t = Mathf.PingPong(Time.time * magnitude, 1f);
+                popupImage.color = Color.Lerp(color, flashRed, t);
+            }
+            else
+            {
+                rectTransform.anchoredPosition = originalPos; // Reset position after shake
+                popupImage.color = color;
+            }
+
+
+
             if (gameOverUI.activeSelf)
             {
                 PopUpUI.SetActive(false);
                 yield break;
             }
+            totalTime += Time.deltaTime;
 
             yield return null;
         }

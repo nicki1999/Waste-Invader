@@ -135,13 +135,22 @@ public class EnemyController : MonoBehaviour
             }
             if (enemyTransform.countWrongHit >= 2)
             {
-                if (gameManager.DaySkybox != null)
+                if (gameManager.DaySkybox != null && gameManager.Stage == 1)
                 {
                     originalColor = gameManager.DaySkybox.GetColor("_Tint");
                     if (ColorUtility.TryParseHtmlString(targetColorHex, out targetColor))
                     {
                         // Start the coroutine to change the color to the target color for 2 seconds.
-                        StartCoroutine(ChangeSkyboxColorTemporarily(targetColor, 2f));
+                        StartCoroutine(ChangeSkyboxColorTemporarily(targetColor, 0.5f, gameManager.DaySkybox));
+                    }
+                }
+                else if (gameManager.NightSkybox != null && gameManager.Stage == 2)
+                {
+                    originalColor = gameManager.NightSkybox.GetColor("_Tint");
+                    if (ColorUtility.TryParseHtmlString(targetColorHex, out targetColor))
+                    {
+                        // Start the coroutine to change the color to the target color for 2 seconds.
+                        StartCoroutine(ChangeSkyboxColorTemporarily(targetColor, 0.5f, gameManager.NightSkybox));
                     }
                 }
                 enemyTransform.countWrongHit = 0;
@@ -172,11 +181,11 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
-    private IEnumerator ChangeSkyboxColorTemporarily(Color newColor, float duration)
+    private IEnumerator ChangeSkyboxColorTemporarily(Color newColor, float duration, Material skybox)
     {
-        gameManager.DaySkybox.SetColor("_Tint", newColor);
+        skybox.SetColor("_Tint", newColor);
         yield return new WaitForSeconds(duration);
-        gameManager.DaySkybox.SetColor("_Tint", originalColor);
+        skybox.SetColor("_Tint", originalColor);
 
     }
     // Move to the next row

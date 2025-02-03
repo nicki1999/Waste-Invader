@@ -97,11 +97,13 @@ public class Enemy : MonoBehaviour
 
                         killed?.Invoke(this);
                         hitCheck = true;
+                        countWrongHit = 0;
                     }
                 }
                 if (!hitCheck)
                 {
                     IncorrectHit?.Invoke(this);
+                    countWrongHit++;
                 }
             }
         }
