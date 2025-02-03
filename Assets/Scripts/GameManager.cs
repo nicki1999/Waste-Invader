@@ -1709,7 +1709,7 @@ public sealed class GameManager : MonoBehaviour
             }
             else if (enemy.Stage1EnemyType[0] == 8)
             {
-                message = "Dispose this item with the \"Requires Cleaning\" button";
+                message = "Dispose this item with the \"Landfill/Trash\" button";
             }
 
             StartCoroutine(ActivatePopUp(enemy, message));
@@ -1746,7 +1746,7 @@ public sealed class GameManager : MonoBehaviour
             }
             else if (enemy.Stage2EnemyType[0] == 8)
             {
-                message = "Dispose this item with the \"Requires Cleaning\" button";
+                message = "Dispose this item with the \"Landfill/Trash\" button";
             }
 
             StartCoroutine(ActivatePopUp(enemy, message));
