@@ -84,23 +84,22 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") < -0.25f || leftArrowClicked)
         {
             position.x -= speed * Time.deltaTime;
+            movingLeft = true;
             moving = true;
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") > 0.25f || rightArrowClicked)
         {
             position.x += speed * Time.deltaTime;
+            movingLeft = false;
             moving = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") == 0 || leftArrowClicked == false)
-        {
-            moving = false;
-            movingLeft = false;
-        }
-        else if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetAxis("Horizontal") == 0 || rightArrowClicked == false)
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.LeftArrow) && Input.GetAxis("Horizontal") >= -0.25f && !leftArrowClicked &&
+            !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.RightArrow) && Input.GetAxis("Horizontal") <= 0.25f && !rightArrowClicked)
         {
             moving = false;
         }
+
 
         if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Joystick1Button0))
         {
