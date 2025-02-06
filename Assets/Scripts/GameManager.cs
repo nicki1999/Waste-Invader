@@ -416,6 +416,7 @@ public sealed class GameManager : MonoBehaviour
         }
         if (LeaderboardUI.activeSelf)
         {
+
             if (!GraceChecker)
             {
                 GraceChecker = true;
@@ -940,7 +941,7 @@ public sealed class GameManager : MonoBehaviour
             else if (SettingsUI.activeSelf)
                 eventSystem.SetSelectedGameObject(SettingsUI.GetComponentInChildren<Slider>().gameObject, new BaseEventData(eventSystem));
             else if (LeaderboardUI.activeSelf)
-                eventSystem.SetSelectedGameObject(LeaderboardUI.GetComponentInChildren<Slider>().gameObject, new BaseEventData(eventSystem));
+                eventSystem.SetSelectedGameObject(LeaderboardUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
             else if (CampusUI.activeSelf)
                 eventSystem.SetSelectedGameObject(CampusUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
             else if (RecyclingUI.activeSelf)
