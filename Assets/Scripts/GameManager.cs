@@ -416,7 +416,6 @@ public sealed class GameManager : MonoBehaviour
         }
         if (LeaderboardUI.activeSelf)
         {
-
             if (!GraceChecker)
             {
                 GraceChecker = true;
@@ -940,8 +939,6 @@ public sealed class GameManager : MonoBehaviour
                 eventSystem.SetSelectedGameObject(HighScoresUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
             else if (SettingsUI.activeSelf)
                 eventSystem.SetSelectedGameObject(SettingsUI.GetComponentInChildren<Slider>().gameObject, new BaseEventData(eventSystem));
-            else if (LeaderboardUI.activeSelf)
-                eventSystem.SetSelectedGameObject(LeaderboardUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
             else if (CampusUI.activeSelf)
                 eventSystem.SetSelectedGameObject(CampusUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
             else if (RecyclingUI.activeSelf)
@@ -950,6 +947,8 @@ public sealed class GameManager : MonoBehaviour
                 eventSystem.SetSelectedGameObject(KeyboardUI.GetComponentInChildren<Button>().gameObject, new BaseEventData(eventSystem));
             else if (CreditsUI.activeSelf)
                 eventSystem.SetSelectedGameObject(CreditsUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
+            else if (LeaderboardUI.activeSelf)
+                eventSystem.SetSelectedGameObject(LeaderboardUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
             else if (Stage2Tips.activeSelf)
                 eventSystem.SetSelectedGameObject(Stage2Tips.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
         }
