@@ -1032,12 +1032,39 @@ public sealed class GameManager : MonoBehaviour
     {
         MenusToggleOn(KeyboardUI);
         MenusToggleOff(TutorialUI);
-        //KeyboardScript.OnEnterPressed += UpdatePlayerNames;
-        KeyboardButton.onClick.AddListener(NewGame);
+        KeyboardButton.onClick.AddListener(() =>
+        {
+            StartCoroutine(WaitForErrorTextAndStartGame());
+        });
+        // KeyboardButton.onClick.AddListener(NewGame);
         audioManager.Play("Confirm");
         GraceChecker = false;
         GracePeriod = false;
     }
+    private IEnumerator WaitForErrorTextAndStartGame()
+    {
+        CurrentPlayer = Keyboard.storedText;
+
+        // Wait for the coroutine to finish before continuing
+        yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
+
+        // Now execute the rest of the code
+        Keyboard.storedText = "";
+        Keyboard.displayText.text = "";
+
+        if (string.IsNullOrEmpty(Main.Instance.web.errorText.text))
+        {
+            Debug.Log("Error text is null or empty");
+            MenusToggleOff(KeyboardUI);
+            NewGame();
+        }
+        else
+        {
+            Debug.Log($"Error text is not empty: {Main.Instance.web.errorText.text}");
+        }
+    }
+
+
     public void SkipTutorialStage2()
     {
         MenusToggleOff(Stage2TutorialUI);
@@ -1519,69 +1546,6 @@ public sealed class GameManager : MonoBehaviour
         WaveScore -= (enemy.score / 2);
         audioManager.Play("Shoot3");
     }
-
-    // public void UpdatePlayerNames()
-    // {
-    //     CurrentPlayer = Keyboard.storedText;
-    //     Debug.Log("CurrentPlayer" + CurrentPlayer);
-    //     StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
-    //     Keyboard.storedText = "";
-    //     Keyboard.displayText.text = "";
-
-    public void UpdatePlayerNames()
-    {
-        // // Check if Keyboard exists
-        // if (Keyboard == null)
-        // {
-        //     Debug.LogError("Keyboard reference is null!");
-        //     return;
-        // }
-
-        // // Check if storedText is available
-        // if (string.IsNullOrEmpty(Keyboard.storedText))
-        // {
-        //     Debug.LogError("Keyboard.storedText is null or empty!");
-        //     return;
-        // }
-
-        // CurrentPlayer = Keyboard.storedText;
-        // Debug.Log("CurrentPlayer: " + CurrentPlayer);
-
-        // // Check if Main.Instance exists
-        // if (Main.Instance == null)
-        // {
-        //     Debug.LogError("Main.Instance is null! Make sure Main is initialized.");
-        //     return;
-        // }
-
-        // // Check if web exists inside Main.Instance
-        // if (Main.Instance.web == null)
-        // {
-        //     Debug.LogError("Main.Instance.web is null! Make sure web is assigned.");
-        //     return;
-        // }
-
-        // // Start the coroutine if everything is valid
-        // StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
-
-        // // Clear text if displayText exists
-        // if (Keyboard.displayText != null)
-        // {
-        //     Keyboard.displayText.text = "";
-        // }
-        // else
-        // {
-        //     Debug.LogError("Keyboard.displayText is null!");
-        // }
-
-        // Keyboard.storedText = "";
-
-        CurrentPlayer = Keyboard.storedText;
-        Keyboard.storedText = "";
-        Keyboard.displayText.text = "";
-
-    }
-
 
 
     private IEnumerator Countdown()

@@ -39,14 +39,6 @@ public class WebRequests : MonoBehaviour
 {
     public Text errorText;
 
-    void Start()
-    {
-
-        // StartCoroutine(GetLeaderboard("http://172.30.81.176/SpaceInvadersBackend/GetLeaderboard.php"));
-        //StartCoroutine(AddToLeaderboard("http://172.30.81.176/SpaceInvadersBackend/AddToLeaderboard.php", "test1", 1, 1000, 40));
-    }
-
-
     public IEnumerator FilterPlayerName(string playerName)
     {
 
@@ -83,6 +75,7 @@ public class WebRequests : MonoBehaviour
                 else if (!string.IsNullOrEmpty(jsonresponse.success))
                 {
                     Debug.Log("Success: " + jsonresponse.success);
+                    noError();
                 }
 
             }
@@ -131,56 +124,6 @@ public class WebRequests : MonoBehaviour
             Debug.LogError($"Response Code: {webRequest.responseCode}");
             Debug.LogError($"Response Text: {webRequest.downloadHandler.text}");
         }
-
-        //GET request for getting the leaderboard
-        // {
-        //     string uri = "https://2e63-132-205-229-34.ngrok-free.app/SpaceInvadersBackend/GetLeaderboard.php";
-        //     using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
-        //     {
-        //         // Request and wait for the desired page.
-        //         yield return webRequest.SendWebRequest();
-
-        //         string[] pages = uri.Split('/');
-        //         int page = pages.Length - 1;
-
-        //         switch (webRequest.result)
-        //         {
-        //             case UnityWebRequest.Result.ConnectionError:
-        //             case UnityWebRequest.Result.DataProcessingError:
-        //                 Debug.LogError(pages[page] + ": Error: " + webRequest.error);
-        //                 break;
-        //             case UnityWebRequest.Result.ProtocolError:
-        //                 Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
-        //                 break;
-        //             case UnityWebRequest.Result.Success:
-        //                 string json = webRequest.downloadHandler.text;
-        //                 Debug.Log("Received JSON: " + json);
-        //                 LeaderboardWrapper wrapper = JsonUtility.FromJson<LeaderboardWrapper>(json);
-
-        //                 if (wrapper != null && wrapper.leaderboard != null)
-        //                 {
-        //                     LeaderboardEntry[] leaderboardEntries = wrapper.leaderboard;
-
-        //                     int count = Mathf.Min(leaderboardEntries.Length, LeaderboardScoreList.Length);
-
-        //                     for (int i = 0; i < count; i++)
-        //                     {
-        //                         LeaderboardScoreList[i].text = leaderboardEntries[i].score.ToString();
-        //                         LeaderboardWaveList[i].text = leaderboardEntries[i].wave.ToString();
-        //                         LeaderboardNameList[i].text = leaderboardEntries[i].name;
-
-        //                         Debug.Log($"Updated UI: {LeaderboardNameList[i].text}, Score: {LeaderboardScoreList[i].text}, Wave: {LeaderboardWaveList[i].text}");
-        //                     }
-        //                 }
-        //                 else
-        //                 {
-        //                     Debug.LogWarning("Failed to parse leaderboard JSON.");
-        //                 }
-
-        //                 break;
-        //         }
-        //     }
-        // }
     }
 
     public IEnumerator AddToLeaderboard(string playerName, int playerWave, int playerScore)
@@ -211,8 +154,18 @@ public class WebRequests : MonoBehaviour
             }
         }
     }
+    private void noError()
+    {
+        if (errorText != null)
+        {
+            errorText.text = "";
+            Debug.Log("Clearing error text.");
+        }
+    }
+
     public void DisplayError(string errorMessage)
     {
+        errorText.text = errorMessage; // Display the error message in the Text component
         Debug.Log("errorMessage: " + errorMessage + " errorText.text: " + errorText.text);
 
         if (errorText != null) // Check if errorText is assigned

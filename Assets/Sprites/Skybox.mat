@@ -124,5 +124,5 @@ Material:
     - _GroundColor: {r: 0.369, g: 0.349, b: 0.341, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SkyTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _Tint: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 0.5}
+    - _Tint: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
   m_BuildTextureStacks: []
