@@ -14,7 +14,7 @@ public class KeyboardScript : MonoBehaviour
 
     public void KeyInput(string Key)
     {
-        if (storedText.Length < 3)
+        if (storedText.Length < 6)
             storedText += Key;
 
         displayText.text = storedText;
