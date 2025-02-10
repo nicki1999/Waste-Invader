@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8922502034929116581}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2.6209915, y: 1.4595902, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -153,3 +153,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7e3273024d0d96445bc6e0b4fd693f2c, type: 3}
   animationTime: 1
   EnemyName: 'Plastic Type 2: HDPE'
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0
+  countWrongHit: 0

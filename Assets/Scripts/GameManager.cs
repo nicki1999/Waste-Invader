@@ -3,6 +3,7 @@ using System.Collections;
 using JetBrains.Annotations;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -28,6 +29,7 @@ public sealed class GameManager : MonoBehaviour
     public GameObject RecyclingUI;
     public GameObject AboutUI;
     public GameObject StatTrackerUI;
+    public GameObject LoadingUI;
     public Text[] StatTrackerStats;
     public GameObject IdleMenuUI;
     public GameObject KeyboardUI;
@@ -121,7 +123,6 @@ public sealed class GameManager : MonoBehaviour
     {
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
-        GetLeaderboard();
 
 
         player.killed += OnPlayerKilled;
@@ -256,6 +257,9 @@ public sealed class GameManager : MonoBehaviour
         }
 
         MainMenu();
+
+        GetLeaderboard(MenuUI);
+
     }
 
     // If no lives and player hits enter, restart
@@ -430,6 +434,22 @@ public sealed class GameManager : MonoBehaviour
                     audioManager.Play("Back");
                     GraceChecker = false;
                     GracePeriod = false;
+                }
+
+            }
+        }
+        if (LoadingUI.activeSelf)
+        {
+            if (!GraceChecker)
+            {
+                GraceChecker = true;
+                StartCoroutine(WaitForGrace());
+            }
+            if (GracePeriod)
+            {
+                if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
+                {
+
                 }
 
             }
@@ -856,6 +876,7 @@ public sealed class GameManager : MonoBehaviour
         PopUpUI.SetActive(false);
         Stage2UI.SetActive(false);
         Stage2Tips.SetActive(false);
+        LoadingUI.SetActive(false);
         TutorialObjects.GetComponentInChildren<Player>().Tutorial = false;
 
         eventSystem.SetSelectedGameObject(MenuUI.GetComponentInChildren<Button>().gameObject, new BaseEventData(eventSystem));
@@ -937,6 +958,8 @@ public sealed class GameManager : MonoBehaviour
         {
             if (HighScoresUI.activeSelf)
                 eventSystem.SetSelectedGameObject(HighScoresUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
+            else if (LoadingUI.activeSelf)
+                eventSystem.SetSelectedGameObject(LoadingUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
             else if (SettingsUI.activeSelf)
                 eventSystem.SetSelectedGameObject(SettingsUI.GetComponentInChildren<Slider>().gameObject, new BaseEventData(eventSystem));
             else if (CampusUI.activeSelf)
@@ -949,8 +972,10 @@ public sealed class GameManager : MonoBehaviour
                 eventSystem.SetSelectedGameObject(CreditsUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
             else if (LeaderboardUI.activeSelf)
                 eventSystem.SetSelectedGameObject(LeaderboardUI.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
+
             else if (Stage2Tips.activeSelf)
                 eventSystem.SetSelectedGameObject(Stage2Tips.GetComponentInChildren<Scrollbar>().gameObject, new BaseEventData(eventSystem));
+
         }
         else
         {
@@ -1280,7 +1305,7 @@ public sealed class GameManager : MonoBehaviour
                 {
                     yield return StartCoroutine(Main.Instance.web.AddToLeaderboard(
                         NameList[0].text, int.Parse(WaveList[0].text), int.Parse(ScoreList[0].text)));
-                    GetLeaderboard();
+                    GetLeaderboard(MenuUI);
 
                 }
                 else
@@ -1344,7 +1369,7 @@ public sealed class GameManager : MonoBehaviour
         else
             StartCoroutine(GameOver());
     }
-    private void GetLeaderboard()
+    private void GetLeaderboard(GameObject currentActiveScene)
     {
         //1. assign the text to leaderboard
         int childCount = leaderboardObject.transform.childCount;
@@ -1385,7 +1410,23 @@ public sealed class GameManager : MonoBehaviour
         }
         //3. populate the arrays with the database values
         Debug.Log("Attempting to get leaderboard...");
-        StartCoroutine(Main.Instance.web.GetLeaderboard(LeaderboardScoreList, LeaderboardWaveList, LeaderboardNameList));
+        if (LoadingUI != null)
+        {
+            MenusToggleOff(currentActiveScene);
+            MenusToggleOn(LoadingUI);
+
+        }
+
+        StartCoroutine(WaitAndFetchLeaderboard(currentActiveScene));
+
+
+    }
+    private IEnumerator WaitAndFetchLeaderboard(GameObject currentActiveScene)
+    {
+        yield return StartCoroutine(Main.Instance.web.GetLeaderboard(LeaderboardScoreList, LeaderboardWaveList, LeaderboardNameList));
+        MenusToggleOff(LoadingUI);
+        MenusToggleOn(MenuUI);
+
     }
     // When an enemy dies, add score, if all dead, start next round
     private void OnEnemyKilled(Enemy enemy)
