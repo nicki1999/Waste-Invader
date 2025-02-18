@@ -32,14 +32,16 @@ public class EnemyController : MonoBehaviour
     public string targetColorHex = "#BC2727"; // Hex color string to set the skybox color.
     private Color originalColor;    // To store the original color of the skybox.
     private Color targetColor;
+    public GameObject buttonContainer;
 
-
+    private float worldOffset = 0.0f;
 
     // Initial spawn of enemies
     private void Awake()
     {
         initialPos = transform.position;
     }
+
 
     private void RandomizeEnemies()
     {
@@ -159,16 +161,16 @@ public class EnemyController : MonoBehaviour
             }
 
             //for adding the function buttons I aded more padding to the left and right
-            if (direction == Vector3.right && enemy.position.x >= (Camera.main.ViewportToWorldPoint(Vector3.right).x - 6f))
-            {
-                NextRow();
-                break;
-            }
-            else if (direction == Vector3.left && enemy.position.x <= (Camera.main.ViewportToWorldPoint(Vector3.zero).x + 6f))
-            {
-                NextRow();
-                break;
-            }
+            // if (direction == Vector3.right && enemy.position.x >= (Camera.main.ViewportToWorldPoint(Vector3.right).x))
+            // {
+            //     NextRow();
+            //     break;
+            // }
+            // else if (direction == Vector3.left && enemy.position.x <= (Camera.main.ViewportToWorldPoint(Vector3.zero).x))
+            // {
+            //     NextRow();
+            //     break;
+            // }
 
             if (!bottomCheck && enemy.position.y <= player.transform.position.y)
             {
@@ -189,7 +191,7 @@ public class EnemyController : MonoBehaviour
 
     }
     // Move to the next row
-    private void NextRow()
+    public void NextRow()
     {
         direction = new Vector3(-direction.x, 0f, 0f);
 

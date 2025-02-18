@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,15 +26,16 @@ public class Enemy : MonoBehaviour
     public int PopUpMessageInt = 0;
 
     public int countWrongHit = 0;
+    private bool canTrigger = true;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         hitCheck = false;
     }
-
     private void Start()
     {
         //InvokeRepeating(nameof(AnimateEnemy), animationTime, animationTime);
+
     }
 
     private void AnimateEnemy()
@@ -46,11 +49,33 @@ public class Enemy : MonoBehaviour
         spriteRenderer.sprite = animationImages[animationFrame];
     }
 
+
+    // Coroutine to handle the delay
+    private IEnumerator TriggerCooldown()
+    {
+        // Set canTrigger to false so the trigger doesn't happen again immediately
+        canTrigger = false;
+
+        // Wait for the specified delay time
+        yield return new WaitForSeconds(1.0f);
+
+        // Re-enable triggering after the delay
+        canTrigger = true;
+    }
     // When hit by a laser, send out death message
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        EnemyController enemyController = GetComponentInParent<EnemyController>();
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("UIContainer") && canTrigger)
+        {
+            enemyController.NextRow();
+            Debug.Log("UI Hit");
+            StartCoroutine(TriggerCooldown());
+        }
         if (collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
+            Debug.Log("Laser Hit");
             GameManager gameManager = GetComponentInParent<EnemyController>().gameManager;
 
             if (gameManager.Stage == 1)
