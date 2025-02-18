@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -20,8 +21,8 @@ public class EnemyController : MonoBehaviour
     public int TotalEnemies => rows * columns;
     public float PercentKilled => (float)NumberKilled / (float)TotalEnemies;
     private float slowdownFactor = 0.3f;
-    public int rows = 5;
-    public int columns = 11;
+    private int rows = 0;
+    private int columns = 0;
 
     public float HorizontalSpacing = 2.0f;
     public float VerticalSpacing = 2.0f;
@@ -32,19 +33,74 @@ public class EnemyController : MonoBehaviour
     public string targetColorHex = "#BC2727"; // Hex color string to set the skybox color.
     private Color originalColor;    // To store the original color of the skybox.
     private Color targetColor;
-    public GameObject buttonContainer;
 
     private float worldOffset = 0.0f;
-
+    public GameObject leftButtonContainer;
+    public GameObject rightButtonContainer;
     // Initial spawn of enemies
+
+
     private void Awake()
     {
+
+        Transform functionButtonContainerLeft = leftButtonContainer.transform.Find("FunctionButtonContainerLeft");
+        Transform functionButtonContainerRight = rightButtonContainer.transform.Find("FunctionButtonContainerRight");
+
+        VerticalLayoutGroup leftVerticalLayoutGroup = functionButtonContainerLeft.GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup rightVerticalLayoutGroup = functionButtonContainerRight.GetComponent<VerticalLayoutGroup>();
+
         initialPos = transform.position;
+        float currentAspect = (float)Screen.width / Screen.height;
+        Debug.Log($"Current Aspect Ratio: {currentAspect}");
+
+        float tolerance = 0.05f;
+        float biggerTolerance = 0.1f;
+
+        if (Mathf.Abs(currentAspect - (16f / 9f)) < tolerance)
+        {
+            Debug.Log("16:9 Aspect Ratio");
+            rows = 3;
+            columns = 10;
+            leftVerticalLayoutGroup.padding.top = 661;
+            rightVerticalLayoutGroup.padding.top = 661;
+        }
+        else if (Mathf.Abs(currentAspect - (16f / 10f)) < tolerance)
+        {
+            Debug.Log("16:10 Aspect Ratio");
+            rows = 3;
+            columns = 8;
+            leftVerticalLayoutGroup.padding.top = 776;
+            rightVerticalLayoutGroup.padding.top = 776;
+        }
+        else if (Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
+        {
+            Debug.Log("19.5:9 Aspect Ratio");
+            rows = 3;
+            columns = 10;
+
+        }
+        else if (Mathf.Abs(currentAspect - (4f / 3f)) < tolerance)
+        {
+            Debug.Log("4:3 Aspect Ratio");
+            rows = 3;
+            columns = 6;
+        }
+        else
+        {
+            Debug.Log("Interpolated for unknown ratios");
+            rows = 3;
+            columns = 7;
+        }
+
     }
 
 
     private void RandomizeEnemies()
     {
+        Transform functionButtonContainerRight = rightButtonContainer.transform.Find("FunctionButtonContainerRight");
+        VerticalLayoutGroup rightVerticalLayoutGroup = functionButtonContainerRight.GetComponent<VerticalLayoutGroup>();
+
+
         for (int i = 0; i < rows; i++)
         {
             Vector2 centerOffset = new Vector2((-HorizontalSpacing * (columns - 1)) * 0.5f, (-VerticalSpacing * (rows - 1)) * 0.5f);
@@ -55,6 +111,7 @@ public class EnemyController : MonoBehaviour
                 Enemy enemy = new Enemy();
                 if (gameManager.Stage == 1)
                 {
+                    rightVerticalLayoutGroup.spacing = 568;
                     if (Random.Range(1, 101) <= gameManager.TintedEnemyChance)
                     {
                         enemy = Instantiate(TintedEnemiesStage1[Random.Range(0, TintedEnemiesStage1.Length)], transform);
@@ -107,6 +164,7 @@ public class EnemyController : MonoBehaviour
                 else if (gameManager.Stage == 2)
                 {
                     enemy = Instantiate(Stage2Enemies[Random.Range(0, Stage2Enemies.Length)], transform);
+                    rightVerticalLayoutGroup.spacing = 94;
                 }
                 enemy.killed += EnemyDeath;
                 enemy.IncorrectHit += IncorrectlyHit;
