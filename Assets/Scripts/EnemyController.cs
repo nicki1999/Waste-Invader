@@ -37,8 +37,11 @@ public class EnemyController : MonoBehaviour
     private float worldOffset = 0.0f;
     public GameObject leftButtonContainer;
     public GameObject rightButtonContainer;
+    public Canvas canvas;
     // Initial spawn of enemies
-
+    private float currentAspect;
+    private float tolerance = 0.05f;
+    private float biggerTolerance = 0.1f;
 
     private void Awake()
     {
@@ -50,11 +53,10 @@ public class EnemyController : MonoBehaviour
         VerticalLayoutGroup rightVerticalLayoutGroup = functionButtonContainerRight.GetComponent<VerticalLayoutGroup>();
 
         initialPos = transform.position;
-        float currentAspect = (float)Screen.width / Screen.height;
+        currentAspect = (float)Screen.width / Screen.height;
         Debug.Log($"Current Aspect Ratio: {currentAspect}");
 
-        float tolerance = 0.05f;
-        float biggerTolerance = 0.1f;
+
 
         if (Mathf.Abs(currentAspect - (16f / 9f)) < tolerance)
         {
@@ -63,6 +65,8 @@ public class EnemyController : MonoBehaviour
             columns = 10;
             leftVerticalLayoutGroup.padding.top = 661;
             rightVerticalLayoutGroup.padding.top = 661;
+            leftVerticalLayoutGroup.spacing = 94;
+            rightVerticalLayoutGroup.spacing = 94;
         }
         else if (Mathf.Abs(currentAspect - (16f / 10f)) < tolerance)
         {
@@ -71,20 +75,57 @@ public class EnemyController : MonoBehaviour
             columns = 8;
             leftVerticalLayoutGroup.padding.top = 776;
             rightVerticalLayoutGroup.padding.top = 776;
+            leftVerticalLayoutGroup.spacing = 94;
+            rightVerticalLayoutGroup.spacing = 94;
         }
-        else if (Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
+        else if (Mathf.Abs(currentAspect - (18f / 9f)) < biggerTolerance)
         {
-            Debug.Log("19.5:9 Aspect Ratio");
+            leftVerticalLayoutGroup.padding.top = 534;
+            rightVerticalLayoutGroup.padding.top = 534;
+            leftVerticalLayoutGroup.spacing = 71;
+            rightVerticalLayoutGroup.spacing = 71;
             rows = 3;
             columns = 10;
-
         }
+
         else if (Mathf.Abs(currentAspect - (4f / 3f)) < tolerance)
         {
             Debug.Log("4:3 Aspect Ratio");
             rows = 3;
             columns = 6;
         }
+        else if (Mathf.Abs(currentAspect - (19f / 9f)) < tolerance)
+        {
+            Debug.Log("19:9 Aspect Ratio");
+            rows = 3;
+            columns = 10;
+            leftVerticalLayoutGroup.padding.top = 484;
+            rightVerticalLayoutGroup.padding.top = 484;
+            leftVerticalLayoutGroup.spacing = 64;
+            rightVerticalLayoutGroup.spacing = 64;
+        }
+        else if (Mathf.Abs(currentAspect - (20f / 9f)) < biggerTolerance)
+        {
+            Debug.Log("20:9 Aspect Ratio");
+            rows = 3;
+            columns = 10;
+            leftVerticalLayoutGroup.padding.top = 438;
+            rightVerticalLayoutGroup.padding.top = 438;
+            leftVerticalLayoutGroup.spacing = 55;
+            rightVerticalLayoutGroup.spacing = 55;
+        }
+        else if (Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
+        {
+            Debug.Log("19.5:9 Aspect Ratio");
+            rows = 3;
+            columns = 10;
+            leftVerticalLayoutGroup.padding.top = 456;
+            rightVerticalLayoutGroup.padding.top = 456;
+            leftVerticalLayoutGroup.spacing = 58;
+            rightVerticalLayoutGroup.spacing = 58;
+        }
+
+
         else
         {
             Debug.Log("Interpolated for unknown ratios");
@@ -97,8 +138,6 @@ public class EnemyController : MonoBehaviour
 
     private void RandomizeEnemies()
     {
-        Transform functionButtonContainerRight = rightButtonContainer.transform.Find("FunctionButtonContainerRight");
-        VerticalLayoutGroup rightVerticalLayoutGroup = functionButtonContainerRight.GetComponent<VerticalLayoutGroup>();
 
 
         for (int i = 0; i < rows; i++)
@@ -111,7 +150,6 @@ public class EnemyController : MonoBehaviour
                 Enemy enemy = new Enemy();
                 if (gameManager.Stage == 1)
                 {
-                    rightVerticalLayoutGroup.spacing = 568;
                     if (Random.Range(1, 101) <= gameManager.TintedEnemyChance)
                     {
                         enemy = Instantiate(TintedEnemiesStage1[Random.Range(0, TintedEnemiesStage1.Length)], transform);
@@ -164,7 +202,6 @@ public class EnemyController : MonoBehaviour
                 else if (gameManager.Stage == 2)
                 {
                     enemy = Instantiate(Stage2Enemies[Random.Range(0, Stage2Enemies.Length)], transform);
-                    rightVerticalLayoutGroup.spacing = 94;
                 }
                 enemy.killed += EnemyDeath;
                 enemy.IncorrectHit += IncorrectlyHit;
@@ -179,6 +216,7 @@ public class EnemyController : MonoBehaviour
     // Update speed based on # of enemies left, and move enemies, if any hitting the wall, move down, if any below map, restart
     private void Update()
     {
+
         float speed = Speed.Evaluate(PercentKilled) * slowdownFactor;
         transform.position += direction * speed * Time.deltaTime;
 

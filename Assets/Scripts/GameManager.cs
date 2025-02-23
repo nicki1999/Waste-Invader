@@ -56,7 +56,7 @@ public sealed class GameManager : MonoBehaviour
     public GameObject[] buttons;
     public GameObject LeftButtonContainer;
     public GameObject RightButtonContainer;
-
+    public Canvas canvas;
     private bool AFKCheck;
     private bool IdleCheck;
     private bool GracePeriod;
@@ -96,6 +96,7 @@ public sealed class GameManager : MonoBehaviour
     public Text[] LeaderboardNameList;
     public GameObject leaderboardObject;
 
+    private float biggerTolerance = 0.1f;
 
     private KeyCode[] sequence = new KeyCode[]
     {
@@ -265,6 +266,21 @@ public sealed class GameManager : MonoBehaviour
     // If no lives and player hits enter, restart
     private void Update()
     {
+        float currentAspect = (float)Screen.width / Screen.height;
+
+        if (Mathf.Abs(currentAspect - (18f / 9f)) < biggerTolerance || Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
+        {
+            Debug.Log("18:9 & 19.5:9 Aspect Ratio");
+            if (InGameUI.activeSelf)
+            {
+                canvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 0f;
+            }
+            else
+            {
+                canvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 1f;
+            }
+
+        }
 
         if (MenuUI.activeSelf)
         {
@@ -679,6 +695,7 @@ public sealed class GameManager : MonoBehaviour
             Button[] conditionalButtons = InGameUI.GetComponentsInChildren<Button>(true);
             // buttons that need to be disabled for stage 1
             String[] disableButtons = new string[] { "button_yellow", "button_blue", "button_brown", "button_purple" };
+            String[] disableButtonsStage2 = new string[] { "Button_Idle" };
             if (Stage == 1)
             {
                 foreach (Button button in conditionalButtons)
@@ -704,6 +721,14 @@ public sealed class GameManager : MonoBehaviour
                         {
                             button.interactable = true;
                             button.gameObject.SetActive(true);
+                        }
+                    }
+                    foreach (string disableButton in disableButtonsStage2)
+                    {
+                        if (button.name.Contains(disableButton))
+                        {
+                            button.interactable = false;
+                            button.gameObject.SetActive(false);
                         }
                     }
                 }

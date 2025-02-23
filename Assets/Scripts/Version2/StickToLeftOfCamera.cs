@@ -7,7 +7,7 @@ public class StickToTheEdgeOfCamera : MonoBehaviour
     public string container; // "left" or "right" for positioning
 
     private float targetScaleX; // Target X scale based on aspect ratio
-
+    private float biggerTolerance = 0.1f; // Tolerance for bigger aspect ratios
     void Start()
     {
         if (mainCamera == null)
@@ -45,12 +45,16 @@ public class StickToTheEdgeOfCamera : MonoBehaviour
 
         // Get current aspect ratio
         float currentAspect = (float)Screen.width / Screen.height;
-
+        if (Mathf.Abs(currentAspect - (18f / 9f)) < biggerTolerance || Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
+        {
+            targetScaleX = 12f; // 16:10 Aspect Ratio
+        }
         // Define known aspect ratios and corresponding scale values
-        if (Mathf.Approximately(currentAspect, 16f / 9f))
+        else if (Mathf.Approximately(currentAspect, 16f / 9f))
             targetScaleX = 9.5f; // 16:9 Aspect Ratio
         else if (Mathf.Approximately(currentAspect, 16f / 10f))
             targetScaleX = 8.5f; // 16:10 Aspect Ratio
+
         else if (Mathf.Approximately(currentAspect, 4f / 3f))
             targetScaleX = 7.5f; // 4:3 Aspect Ratio
         else
