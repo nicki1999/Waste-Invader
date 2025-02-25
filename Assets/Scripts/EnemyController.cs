@@ -91,6 +91,20 @@ public class EnemyController : MonoBehaviour
         else if (Mathf.Abs(currentAspect - (4f / 3f)) < tolerance)
         {
             Debug.Log("4:3 Aspect Ratio");
+            leftVerticalLayoutGroup.padding.top = 968;
+            rightVerticalLayoutGroup.padding.top = 968;
+            leftVerticalLayoutGroup.spacing = 138;
+            rightVerticalLayoutGroup.spacing = 138;
+            rows = 3;
+            columns = 6;
+        }
+        else if (Mathf.Abs(currentAspect - (3f / 2f)) < tolerance)
+        {
+            Debug.Log("3:2 Aspect Ratio");
+            leftVerticalLayoutGroup.padding.top = 776;
+            rightVerticalLayoutGroup.padding.top = 776;
+            leftVerticalLayoutGroup.spacing = 94;
+            rightVerticalLayoutGroup.spacing = 94;
             rows = 3;
             columns = 6;
         }
