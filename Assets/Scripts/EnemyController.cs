@@ -43,9 +43,11 @@ public class EnemyController : MonoBehaviour
     private float tolerance = 0.05f;
     private float biggerTolerance = 0.1f;
 
+    public GameObject[] functionButtons;
+    public GameObject[] arrowButtons;
+    private Vector3 functionButtonTargetScale = new Vector3(0.8f, 0.8f, 0.8f);
     private void Awake()
     {
-
         Transform functionButtonContainerLeft = leftButtonContainer.transform.Find("FunctionButtonContainerLeft");
         Transform functionButtonContainerRight = rightButtonContainer.transform.Find("FunctionButtonContainerRight");
 
@@ -56,6 +58,12 @@ public class EnemyController : MonoBehaviour
         currentAspect = (float)Screen.width / Screen.height;
         Debug.Log($"Current Aspect Ratio: {currentAspect}");
 
+        leftVerticalLayoutGroup.padding.bottom = 661;
+        rightVerticalLayoutGroup.padding.bottom = 661;
+        leftVerticalLayoutGroup.padding.top = 0;
+        rightVerticalLayoutGroup.padding.top = 0;
+        leftVerticalLayoutGroup.spacing = 103;
+        rightVerticalLayoutGroup.spacing = 103;
 
 
         if (Mathf.Abs(currentAspect - (16f / 9f)) < tolerance)
@@ -63,81 +71,93 @@ public class EnemyController : MonoBehaviour
             Debug.Log("16:9 Aspect Ratio");
             rows = 3;
             columns = 10;
-            leftVerticalLayoutGroup.padding.top = 661;
-            rightVerticalLayoutGroup.padding.top = 661;
-            leftVerticalLayoutGroup.spacing = 94;
-            rightVerticalLayoutGroup.spacing = 94;
+            // leftVerticalLayoutGroup.padding.top = 661;
+            // rightVerticalLayoutGroup.padding.top = 661;
+            // leftVerticalLayoutGroup.spacing = 94;
+            // rightVerticalLayoutGroup.spacing = 94;
         }
         else if (Mathf.Abs(currentAspect - (16f / 10f)) < tolerance)
         {
             Debug.Log("16:10 Aspect Ratio");
             rows = 3;
             columns = 8;
-            leftVerticalLayoutGroup.padding.top = 776;
-            rightVerticalLayoutGroup.padding.top = 776;
-            leftVerticalLayoutGroup.spacing = 94;
-            rightVerticalLayoutGroup.spacing = 94;
-        }
-        else if (Mathf.Abs(currentAspect - (18f / 9f)) < biggerTolerance)
-        {
-            leftVerticalLayoutGroup.padding.top = 534;
-            rightVerticalLayoutGroup.padding.top = 534;
-            leftVerticalLayoutGroup.spacing = 71;
-            rightVerticalLayoutGroup.spacing = 71;
-            rows = 3;
-            columns = 10;
+            // leftVerticalLayoutGroup.padding.top = 776;
+            // rightVerticalLayoutGroup.padding.top = 776;
+            // leftVerticalLayoutGroup.spacing = 94;
+            // rightVerticalLayoutGroup.spacing = 94;
         }
 
-        else if (Mathf.Abs(currentAspect - (4f / 3f)) < tolerance)
+        //mobile screens
+
+        else if (Mathf.Abs(currentAspect - (18f / 9f)) < biggerTolerance
+        || Mathf.Abs(currentAspect - (19f / 9f)) < biggerTolerance
+        || Mathf.Abs(currentAspect - (4f / 3f)) < tolerance
+        || Mathf.Abs(currentAspect - (3f / 2f)) < tolerance
+        || Mathf.Abs(currentAspect - (20f / 9f)) < biggerTolerance
+        || Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
         {
-            Debug.Log("4:3 Aspect Ratio");
-            leftVerticalLayoutGroup.padding.top = 968;
-            rightVerticalLayoutGroup.padding.top = 968;
-            leftVerticalLayoutGroup.spacing = 138;
-            rightVerticalLayoutGroup.spacing = 138;
-            rows = 3;
-            columns = 6;
-        }
-        else if (Mathf.Abs(currentAspect - (3f / 2f)) < tolerance)
-        {
-            Debug.Log("3:2 Aspect Ratio");
-            leftVerticalLayoutGroup.padding.top = 776;
-            rightVerticalLayoutGroup.padding.top = 776;
-            leftVerticalLayoutGroup.spacing = 94;
-            rightVerticalLayoutGroup.spacing = 94;
-            rows = 3;
-            columns = 6;
-        }
-        else if (Mathf.Abs(currentAspect - (19f / 9f)) < tolerance)
-        {
-            Debug.Log("19:9 Aspect Ratio");
-            rows = 3;
-            columns = 10;
-            leftVerticalLayoutGroup.padding.top = 484;
-            rightVerticalLayoutGroup.padding.top = 484;
-            leftVerticalLayoutGroup.spacing = 64;
-            rightVerticalLayoutGroup.spacing = 64;
-        }
-        else if (Mathf.Abs(currentAspect - (20f / 9f)) < biggerTolerance)
-        {
-            Debug.Log("20:9 Aspect Ratio");
+            Debug.Log("Aspect ratio test");
+            foreach (GameObject button in functionButtons)
+            {
+                button.transform.localScale = functionButtonTargetScale;
+                leftVerticalLayoutGroup.spacing = 35;
+                rightVerticalLayoutGroup.spacing = 35;
+                RectTransform rectTransformleft = functionButtonContainerLeft.GetComponent<RectTransform>();
+                rectTransformleft.anchoredPosition = new Vector2(25, rectTransformleft.anchoredPosition.y);
+                RectTransform rectTransformRight = functionButtonContainerRight.GetComponent<RectTransform>();
+                rectTransformRight.anchoredPosition = new Vector2(8, rectTransformRight.anchoredPosition.y);
+
+            }
+            foreach (GameObject arrow in arrowButtons)
+            {
+                RectTransform rectTransform = arrow.GetComponent<RectTransform>();
+                rectTransform.sizeDelta = new Vector2(152, rectTransform.sizeDelta.y);
+
+            }
             rows = 3;
             columns = 10;
-            leftVerticalLayoutGroup.padding.top = 438;
-            rightVerticalLayoutGroup.padding.top = 438;
-            leftVerticalLayoutGroup.spacing = 55;
-            rightVerticalLayoutGroup.spacing = 55;
         }
-        else if (Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
-        {
-            Debug.Log("19.5:9 Aspect Ratio");
-            rows = 3;
-            columns = 10;
-            leftVerticalLayoutGroup.padding.top = 456;
-            rightVerticalLayoutGroup.padding.top = 456;
-            leftVerticalLayoutGroup.spacing = 58;
-            rightVerticalLayoutGroup.spacing = 58;
-        }
+        // else if (Mathf.Abs(currentAspect - (18f / 9f)) < biggerTolerance)
+        // {
+        //     leftVerticalLayoutGroup.padding.bottom = 781;
+        //     rightVerticalLayoutGroup.padding.bottom = 781;
+        //     leftVerticalLayoutGroup.spacing = 77;
+        //     rightVerticalLayoutGroup.spacing = 77;
+        //     rows = 3;
+        //     columns = 10;
+        // }
+
+
+        // else if (Mathf.Abs(currentAspect - (19f / 9f)) < tolerance)
+        // {
+        //     Debug.Log("19:9 Aspect Ratio");
+        //     rows = 3;
+        //     columns = 10;
+        //     leftVerticalLayoutGroup.padding.bottom = 831;
+        //     rightVerticalLayoutGroup.padding.bottom = 831;
+        //     leftVerticalLayoutGroup.spacing = 66;
+        //     rightVerticalLayoutGroup.spacing = 66;
+        // }
+        // else if (Mathf.Abs(currentAspect - (20f / 9f)) < biggerTolerance)
+        // {
+        //     Debug.Log("20:9 Aspect Ratio");
+        //     rows = 3;
+        //     columns = 10;
+        //     leftVerticalLayoutGroup.padding.bottom = 875;
+        //     rightVerticalLayoutGroup.padding.bottom = 875;
+        //     leftVerticalLayoutGroup.spacing = 56;
+        //     rightVerticalLayoutGroup.spacing = 56;
+        // }
+        // else if (Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
+        // {
+        //     Debug.Log("19.5:9 Aspect Ratio");
+        //     rows = 3;
+        //     columns = 10;
+        //     leftVerticalLayoutGroup.padding.top = 456;
+        //     rightVerticalLayoutGroup.padding.top = 456;
+        //     leftVerticalLayoutGroup.spacing = 58;
+        //     rightVerticalLayoutGroup.spacing = 58;
+        // }
 
 
         else
@@ -145,6 +165,26 @@ public class EnemyController : MonoBehaviour
             Debug.Log("Interpolated for unknown ratios");
             rows = 3;
             columns = 7;
+        }
+        if (Mathf.Abs(currentAspect - (4f / 3f)) < biggerTolerance)
+        {
+            Debug.Log("4:3 Aspect Ratio");
+            //     leftVerticalLayoutGroup.padding.top = 968;
+            //     rightVerticalLayoutGroup.padding.top = 968;
+            //     leftVerticalLayoutGroup.spacing = 138;
+            //     rightVerticalLayoutGroup.spacing = 138;
+            rows = 3;
+            columns = 6;
+        }
+        else if (Mathf.Abs(currentAspect - (3f / 2f)) < tolerance)
+        {
+            //     Debug.Log("3:2 Aspect Ratio");
+            //     leftVerticalLayoutGroup.padding.top = 776;
+            //     rightVerticalLayoutGroup.padding.top = 776;
+            //     leftVerticalLayoutGroup.spacing = 94;
+            //     rightVerticalLayoutGroup.spacing = 94;
+            rows = 3;
+            columns = 6;
         }
 
     }

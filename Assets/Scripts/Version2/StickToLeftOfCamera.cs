@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StickToTheEdgeOfCamera : MonoBehaviour
+public class StickToLeftOfCamera : MonoBehaviour
 {
     public Camera mainCamera; // Assign your main camera in the Inspector
     public float xOffset = 0f; // Adjust how far from the left it should be
