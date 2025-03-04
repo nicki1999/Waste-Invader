@@ -45,7 +45,11 @@ public class StickToLeftOfCamera : MonoBehaviour
 
         // Get current aspect ratio
         float currentAspect = (float)Screen.width / Screen.height;
-        if (Mathf.Abs(currentAspect - (18f / 9f)) < biggerTolerance || Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
+        if (Mathf.Abs(currentAspect - (20f / 9f)) < biggerTolerance)
+        {
+            targetScaleX = 12.5f;
+        }
+        else if (Mathf.Abs(currentAspect - (18f / 9f)) < biggerTolerance || Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
         {
             targetScaleX = 12f; // 16:10 Aspect Ratio
         }
