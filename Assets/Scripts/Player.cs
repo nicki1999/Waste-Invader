@@ -49,7 +49,14 @@ public class Player : MonoBehaviour
     private bool leftArrowClicked = false;
     private bool rightArrowClicked = false;
 
-
+    public GameObject leftArrow;
+    public Sprite leftArrowPressed;
+    public GameObject rightArrow;
+    public Sprite righttArrowPressed;
+    private Image leftArrowImage;
+    private Image rightArrowImage;
+    private Sprite normalLeftArrow;
+    private Sprite normalRightArrow;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -58,23 +65,32 @@ public class Player : MonoBehaviour
     private void Start()
     {
         InvokeRepeating(nameof(AnimatePlayer), animationSpeed, animationSpeed);
+        leftArrowImage = leftArrow.GetComponent<Image>();
+        rightArrowImage = rightArrow.GetComponent<Image>();
+        normalLeftArrow = leftArrowImage.sprite;
+        normalRightArrow = rightArrowImage.sprite;
+
     }
     public void MoveLeftButton()
     {
         leftArrowClicked = true;
+        leftArrowImage.sprite = leftArrowPressed;
     }
     public void MoveLeftButtonStop()
     {
         leftArrowClicked = false;
+        leftArrowImage.sprite = normalLeftArrow;
     }
     // Handles movement and shooting
     public void MoveRightButton()
     {
         rightArrowClicked = true;
+        rightArrowImage.sprite = righttArrowPressed;
     }
     public void MoveRightButtonStop()
     {
         rightArrowClicked = false;
+        rightArrowImage.sprite = normalRightArrow;
     }
     // Handles movement and shooting
     private void Update()
