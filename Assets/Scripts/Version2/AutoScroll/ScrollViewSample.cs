@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -183,15 +184,17 @@ public class ScrollViewSample : MonoBehaviour
         {
             item = children[i];
             navigation = item.gameObject.GetComponent<Button>().navigation;
-            navigation.selectOnLeft = GetNavigationUp(i, children.Length);
-            navigation.selectOnRight = GetNavigationDown(i, children.Length);
+            navigation.selectOnLeft = GetNavigationLeft(i, children.Length);
+            navigation.selectOnRight = GetNavigationRight(i, children.Length);
+            navigation.selectOnUp = GetNavigationUp(i, children.Length);
+            navigation.selectOnDown = GetNavigationDown(i, children.Length);
 
             item.gameObject.GetComponent<Button>().navigation = navigation;
         }
     }
 
     // looping navigation
-    private Selectable GetNavigationDown(int indexCurrent, int totalEntires)
+    private Selectable GetNavigationRight(int indexCurrent, int totalEntires)
     {
         ItemButton item;
         if (indexCurrent == totalEntires - 1)
@@ -204,8 +207,34 @@ public class ScrollViewSample : MonoBehaviour
         }
         return item.GetComponent<Selectable>();
     }
-
+    private Selectable GetNavigationDown(int indexCurrent, int totalEntires)
+    {
+        ItemButton item;
+        if (indexCurrent <= (totalEntires - 1) && indexCurrent >= (totalEntires - 13))
+        {
+            item = _content.transform.GetChild(0).GetComponent<ItemButton>();
+        }
+        else
+        {
+            item = _content.transform.GetChild(indexCurrent + 12).GetComponent<ItemButton>();
+        }
+        return item.GetComponent<Selectable>();
+    }
     private Selectable GetNavigationUp(int indexCurrent, int totalEntires)
+    {
+        ItemButton item;
+        if (indexCurrent <= 11 && indexCurrent >= 0)
+        {
+            item = _content.transform.GetChild(totalEntires - 1).GetComponent<ItemButton>();
+        }
+        else
+        {
+            item = _content.transform.GetChild(indexCurrent - 12).GetComponent<ItemButton>();
+        }
+        return item.GetComponent<Selectable>();
+    }
+
+    private Selectable GetNavigationLeft(int indexCurrent, int totalEntires)
     {
         ItemButton item;
         if (indexCurrent == 0)
