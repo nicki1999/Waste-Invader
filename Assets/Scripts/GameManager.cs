@@ -1016,8 +1016,24 @@ public sealed class GameManager : MonoBehaviour
     {
         MenusToggleOn(KeyboardUI);
         MenusToggleOff(TutorialUI);
-        KeyboardButton.onClick.AddListener(() => StartCoroutine(Main.Instance.web.FilterPlayerName(Keyboard.storedText)));
-        //KeyboardButton.onClick.AddListener(StartTutorial);
+        //KeyboardButton.onClick.AddListener(() => StartCoroutine(Main.Instance.web.FilterPlayerName(Keyboard.storedText)));
+        KeyboardButton.onClick.AddListener(() =>
+        {
+            StartCoroutine(WaitForErrorTextAndShowTutorial());
+        });
+        audioManager.Play("Confirm");
+        GraceChecker = false;
+        GracePeriod = false;
+    }
+    public void SkipTutorial()
+    {
+        MenusToggleOn(KeyboardUI);
+        MenusToggleOff(TutorialUI);
+        KeyboardButton.onClick.AddListener(() =>
+        {
+            StartCoroutine(WaitForErrorTextAndStartGame());
+        });
+        // KeyboardButton.onClick.AddListener(NewGame);
         audioManager.Play("Confirm");
         GraceChecker = false;
         GracePeriod = false;
@@ -1078,19 +1094,29 @@ public sealed class GameManager : MonoBehaviour
         GracePeriod = false;
     }
 
-    public void SkipTutorial()
+    private IEnumerator WaitForErrorTextAndShowTutorial()
     {
-        MenusToggleOn(KeyboardUI);
-        MenusToggleOff(TutorialUI);
-        KeyboardButton.onClick.AddListener(() =>
+        CurrentPlayer = Keyboard.storedText;
+
+        // Wait for the coroutine to finish before continuing
+        yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
+
+        // Now execute the rest of the code
+        Keyboard.storedText = "";
+        Keyboard.displayText.text = "";
+
+        if (string.IsNullOrEmpty(Main.Instance.web.errorText.text))
         {
-            StartCoroutine(WaitForErrorTextAndStartGame());
-        });
-        // KeyboardButton.onClick.AddListener(NewGame);
-        audioManager.Play("Confirm");
-        GraceChecker = false;
-        GracePeriod = false;
+            Debug.Log("Error text is null or empty");
+            MenusToggleOff(KeyboardUI);
+            StartTutorial();
+        }
+        else
+        {
+            Debug.Log($"Error text is not empty: {Main.Instance.web.errorText.text}");
+        }
     }
+
     private IEnumerator WaitForErrorTextAndStartGame()
     {
         CurrentPlayer = Keyboard.storedText;
