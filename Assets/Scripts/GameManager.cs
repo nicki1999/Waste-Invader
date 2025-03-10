@@ -40,6 +40,7 @@ public sealed class GameManager : MonoBehaviour
     public GameObject Stage2TutorialObjects;
     public GameObject Stage2Tips;
     public GameObject ContinueButtonStage2;
+    public GameObject ContinueButtonStage1;
     public Text PopUpText;
     public GameObject MenuBG;
     public EventSystem eventSystem;
@@ -49,7 +50,7 @@ public sealed class GameManager : MonoBehaviour
     public GameObject TutorialTextPrompt;
     public GameObject IdleImage;
     private Vector3 InitialIdlePosition;
-
+    public ScrollViewSample wiki;
     public Material DaySkybox;
     public Material NightSkybox;
     public Material TutorialSkybox;
@@ -267,6 +268,14 @@ public sealed class GameManager : MonoBehaviour
     // If no lives and player hits enter, restart
     private void Update()
     {
+        if ((RecyclingUI.activeSelf && ContinueButtonStage1.activeSelf) || RecyclingUI.activeSelf && ContinueButtonStage2.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ExitGame();
+                Debug.Log("pressed escape");
+            }
+        }
         float currentAspect = (float)Screen.width / Screen.height;
 
         if (Mathf.Abs(currentAspect - (18f / 9f)) < biggerTolerance || Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
@@ -576,14 +585,7 @@ public sealed class GameManager : MonoBehaviour
             }
         }
 
-        //if (TutorialObjects.activeSelf)
-        //{
-        //    if (!AFKCheck)
-        //    {
-        //        AFKCheck = true;
-        //        StartCoroutine(ReturnToMainScreen());
-        //    }
-        //}
+
 
         if (CreditsUI.activeSelf)
         {
@@ -899,6 +901,8 @@ public sealed class GameManager : MonoBehaviour
         StatTrackerUI.SetActive(false);
         IdleMenuUI.SetActive(false);
         TutorialObjects.SetActive(false);
+        wiki.CreateItemsNoTutorialStage1();
+
         TutorialText.SetActive(false);
         TutorialTextPrompt.SetActive(false);
         KeyboardUI.SetActive(false);
@@ -989,6 +993,9 @@ public sealed class GameManager : MonoBehaviour
         RenderSettings.skybox = TutorialSkybox;
         TutorialActive = true;
         TutorialObjects.SetActive(true);
+        wiki.CreateItemsTutorialStage1();
+
+
         TutorialText.SetActive(true);
         TutorialObjects.GetComponentInChildren<Player>().Tutorial = true;
 

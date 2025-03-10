@@ -17,6 +17,7 @@ public class ScrollViewSample : MonoBehaviour
 
     private Color CompostColor = new Color(0.624f, 0.220f, 0.220f);
 
+
     [SerializeField] private Text titleText;
     [SerializeField] private Text descriptionText;
     [SerializeField] private RectTransform _content;
@@ -141,6 +142,27 @@ public class ScrollViewSample : MonoBehaviour
 
     void Start()
     {
+        CreateItemsNoTutorialStage1();
+
+        UpdateAllButtonNavigationReferences();
+        StartCoroutine(DelayedSelectChild(_defaultSelectedIntex));
+    }
+    public void CreateItemsTutorialStage1()
+    {
+        Debug.Log("Creating items for tutorial stage 1");
+        ClearItems();
+
+        TestCreateItems(Compost, Compost.Count, CompostColor);
+        TestCreateItems(MixedRecycling, MixedRecycling.Count, MixedRecyclingColor);
+        TestCreateItems(PaperRecycling, PaperRecycling.Count, PaperRecyclingColor);
+        TestCreateItems(Landfill, Landfill.Count, LandfillColor);
+        UpdateAllButtonNavigationReferences();
+        StartCoroutine(DelayedSelectChild(_defaultSelectedIntex));
+    }
+    public void CreateItemsNoTutorialStage1()
+    {
+        Debug.Log("Creating items for no tutorial stage 1");
+        ClearItems();
         TestCreateItems(Compost, Compost.Count, CompostColor);
         TestCreateItems(MixedRecycling, MixedRecycling.Count, MixedRecyclingColor);
         TestCreateItems(ElectronicRecycling, ElectronicRecycling.Count, ElectronicRecyclingColor);
@@ -148,8 +170,13 @@ public class ScrollViewSample : MonoBehaviour
         TestCreateItems(Landfill, Landfill.Count, LandfillColor);
         TestCreateItems(Donation, Donation.Count, DonationColor);
         TestCreateItems(RequiresCleaning, RequiresCleaning.Count, RequiresCleaningColor);
-        UpdateAllButtonNavigationReferences();
-        StartCoroutine(DelayedSelectChild(_defaultSelectedIntex));
+    }
+    public void ClearItems()
+    {
+        foreach (Transform child in _content)
+        {
+            Destroy(child.gameObject);
+        }
     }
     public void SelectChild(int index)
     {

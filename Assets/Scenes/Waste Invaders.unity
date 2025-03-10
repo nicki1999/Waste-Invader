@@ -7567,6 +7567,7 @@ MonoBehaviour:
   Stage2TutorialObjects: {fileID: 969042340}
   Stage2Tips: {fileID: 2105990784}
   ContinueButtonStage2: {fileID: 1804827879}
+  ContinueButtonStage1: {fileID: 410122378}
   PopUpText: {fileID: 713287446}
   MenuBG: {fileID: 1618840004}
   eventSystem: {fileID: 702169514}
@@ -7579,6 +7580,7 @@ MonoBehaviour:
   TutorialText: {fileID: 481199632}
   TutorialTextPrompt: {fileID: 1017178318}
   IdleImage: {fileID: 1128394916}
+  wiki: {fileID: 971509234}
   DaySkybox: {fileID: 2100000, guid: d268fb5771f5215419987717efaad408, type: 2}
   NightSkybox: {fileID: 2100000, guid: ae66b00bb41b9004ebcd238b0ddbc87d, type: 2}
   TutorialSkybox: {fileID: 2100000, guid: 668404f96d8979f4dba09483e0d935ed, type: 2}
@@ -30617,7 +30619,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!223 &971509237
 Canvas:
   m_ObjectHideFlags: 0
