@@ -56,7 +56,7 @@ public class EnemyController : MonoBehaviour
 
         initialPos = transform.position;
         currentAspect = (float)Screen.width / Screen.height;
-        Debug.Log($"Current Aspect Ratio: {currentAspect}");
+        //Debug.Log($"Current Aspect Ratio: {currentAspect}");
 
         leftVerticalLayoutGroup.padding.bottom = 661;
         rightVerticalLayoutGroup.padding.bottom = 661;

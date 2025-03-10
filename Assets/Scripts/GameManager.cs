@@ -270,7 +270,7 @@ public sealed class GameManager : MonoBehaviour
 
         if (Mathf.Abs(currentAspect - (18f / 9f)) < biggerTolerance || Mathf.Abs(currentAspect - (19.5f / 9f)) < biggerTolerance)
         {
-            Debug.Log("18:9 & 19.5:9 Aspect Ratio");
+            //Debug.Log("18:9 & 19.5:9 Aspect Ratio");
             if (InGameUI.activeSelf)
             {
                 canvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 0f;
@@ -696,7 +696,7 @@ public sealed class GameManager : MonoBehaviour
             // buttons that need to be disabled for stage 1
             String[] disableButtons = new string[] { "button_yellow", "button_blue", "button_brown", "button_purple" };
             String[] disableButtonsStage2 = new string[] { "Button_Idle" };
-            if (Stage == 1)
+            if (Stage == 1 || TutorialObjects.activeSelf)
             {
                 foreach (Button button in conditionalButtons)
                 {
@@ -942,8 +942,22 @@ public sealed class GameManager : MonoBehaviour
         InGameUI.SetActive(true);
         MenuUI.SetActive(false);
         TutorialUI.SetActive(false);
-        TutorialObjects.GetComponentInChildren<Player>().Tutorial = false;
-
+        if (TutorialObjects != null)
+        {
+            Player player = TutorialObjects.GetComponentInChildren<Player>();
+            if (player != null)
+            {
+                player.Tutorial = false;
+            }
+            else
+            {
+                Debug.LogWarning("Player component not found in TutorialObjects.");
+            }
+        }
+        else
+        {
+            Debug.LogError("TutorialObjects is null!");
+        }
         Stage = 1;
         TintedEnemyChance = 0;
 
