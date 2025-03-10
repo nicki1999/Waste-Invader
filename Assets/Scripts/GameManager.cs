@@ -39,6 +39,7 @@ public sealed class GameManager : MonoBehaviour
     public GameObject Stage2TutorialUI;
     public GameObject Stage2TutorialObjects;
     public GameObject Stage2Tips;
+    public GameObject ContinueButtonStage2;
     public Text PopUpText;
     public GameObject MenuBG;
     public EventSystem eventSystem;
@@ -284,6 +285,9 @@ public sealed class GameManager : MonoBehaviour
 
         if (MenuUI.activeSelf)
         {
+            LeftButtonContainer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bg_menu_initiatives");
+            RightButtonContainer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bg_menu_initiatives");
+
             if (Input.GetKeyDown(KeyCode.Escape))
                 ExitGame();
         }
@@ -629,6 +633,8 @@ public sealed class GameManager : MonoBehaviour
 
         if (Stage2TutorialUI.activeSelf)
         {
+            Debug.Log("Stage2TutorialUI is active");
+            InGameUI.SetActive(false);
             if (!GraceChecker)
             {
                 GraceChecker = true;
@@ -711,7 +717,7 @@ public sealed class GameManager : MonoBehaviour
                 }
 
             }
-            else if (Stage == 2)
+            else if (Stage == 2 && !Stage2TutorialObjects.activeSelf)
             {
                 foreach (Button button in conditionalButtons)
                 {
@@ -1055,7 +1061,8 @@ public sealed class GameManager : MonoBehaviour
     public void ShowTutorialStage2()
     {
         Stage2TutorialObjects.SetActive(true);
-
+        LeftButtonContainer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bg_menu_scores");
+        RightButtonContainer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/bg_menu_scores");
         foreach (Transform item in toggleOnGO)
         {
             item.gameObject.SetActive(false);
@@ -1069,6 +1076,8 @@ public sealed class GameManager : MonoBehaviour
 
     public void SkipTipsPromptStage2()
     {
+        RecyclingUI.SetActive(false);
+        ContinueButtonStage2.SetActive(false);
         MenusToggleOff(Stage2UI);
 
         foreach (Transform item in toggleOnGO)
@@ -1084,12 +1093,14 @@ public sealed class GameManager : MonoBehaviour
     }
     public void ShowTipsPromptStage2()
     {
-        Stage2Tips.SetActive(true);
+        RecyclingUI.SetActive(true);
+        ContinueButtonStage2.SetActive(true);
+        // Stage2Tips.SetActive(true);
         foreach (Transform item in toggleOnGO)
         {
             item.gameObject.SetActive(false);
         }
-        audioManager.Play("Confirm");
+        // audioManager.Play("Confirm");
         MenusToggleOff(Stage2UI);
         GraceChecker = false;
         GracePeriod = false;

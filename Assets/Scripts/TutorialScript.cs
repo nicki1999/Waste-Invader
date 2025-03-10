@@ -217,7 +217,7 @@ public class TutorialScript : MonoBehaviour
         }
 
     }
-    private IEnumerator FlashButtons(GameObject parent, int flashes, float interval, string[] flashButtons, string[] hideButtons, bool showHUD, GameObject HUD)
+    public IEnumerator FlashButtons(GameObject parent, int flashes, float interval, string[] flashButtons, string[] hideButtons, bool showHUD, GameObject HUD)
     {
         if (showHUD == false)
         {
