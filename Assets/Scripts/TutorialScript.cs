@@ -19,7 +19,9 @@ public class TutorialScript : MonoBehaviour
     public GameObject TutorialContinuePrompt;
     public GameObject RecyclingTips;
     public GameManager GM;
-    public GameObject ContinueButton;
+    public GameObject WikiContinueButton;
+    public GameObject WikiReturnButton;
+    public ScrollViewSample wiki;
 
     public Text TextObject;
     public string[] PrintString;
@@ -108,8 +110,9 @@ public class TutorialScript : MonoBehaviour
             {
                 GOUI.SetActive(false);
                 InGameUI.SetActive(true);
-                string[] flashButtons = { "button_red", "button_green", "button_orange", "button_black" };
-                string[] hideButtons = { "LeftArrow", "RightArrow" };
+                string[] flashButtons = { "button_red", "button_green", "button_orange", "button_black", "LeftArrow", "RightArrow" };
+                //string[] navigationButtons = { "LeftArrow", "RightArrow" };
+                string[] hideButtons = { "asd" };
                 StartCoroutine(FlashButtons(InGameUI, 3, 0.5f, flashButtons, hideButtons, false, HUD));
             }
             if (TutorialStage == 6)
@@ -227,6 +230,9 @@ public class TutorialScript : MonoBehaviour
         Button[] hideButtonsArray = parent.GetComponentsInChildren<Button>(true)
         .Where(hideButton => hideButtons.Contains(hideButton.gameObject.name))
         .ToArray();
+        // Button[] navigationButtonsArray = parent.GetComponentsInChildren<Button>(true)
+        // .Where(navigationButton => navigationButtons.Contains(navigationButton.gameObject.name))
+        // .ToArray();
 
         foreach (Button button in hideButtonsArray)
         {
@@ -248,6 +254,10 @@ public class TutorialScript : MonoBehaviour
             }
             yield return new WaitForSeconds(interval);
         }
+        // foreach (Button button in navigationButtonsArray)
+        // {
+        //     button.gameObject.SetActive(true);
+        // }
     }
     private IEnumerator UpdateProceedTutorial()
     {
@@ -286,8 +296,9 @@ public class TutorialScript : MonoBehaviour
         TutorialPrompt.SetActive(false);
         TutorialContinuePrompt.SetActive(false);
         RecyclingTips.SetActive(false);
-        ContinueButton.SetActive(false);
+        WikiContinueButton.SetActive(false);
         GM.NewGame();
+        WikiReturnButton.SetActive(true);
 
         GM.MenusToggleOff(GM.TutorialObjects);
 
@@ -307,8 +318,11 @@ public class TutorialScript : MonoBehaviour
         TutorialPrompt.SetActive(false);
         TutorialPlayer.SetActive(false);
         TutorialText.SetActive(false);
+        WikiReturnButton.SetActive(false);
+
+        wiki.CreateItemsTutorialStage1();
         RecyclingTips.SetActive(true);
-        ContinueButton.SetActive(true);
+        WikiContinueButton.SetActive(true);
 
     }
 }

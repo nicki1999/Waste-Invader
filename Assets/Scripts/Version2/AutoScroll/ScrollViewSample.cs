@@ -142,14 +142,13 @@ public class ScrollViewSample : MonoBehaviour
 
     void Start()
     {
-        CreateItemsNoTutorialStage1();
 
         UpdateAllButtonNavigationReferences();
         StartCoroutine(DelayedSelectChild(_defaultSelectedIntex));
     }
     public void CreateItemsTutorialStage1()
     {
-        Debug.Log("Creating items for tutorial stage 1");
+        // Debug.Log("Creating items for tutorial stage 1");
         ClearItems();
 
         TestCreateItems(Compost, Compost.Count, CompostColor);
@@ -161,7 +160,7 @@ public class ScrollViewSample : MonoBehaviour
     }
     public void CreateItemsNoTutorialStage1()
     {
-        Debug.Log("Creating items for no tutorial stage 1");
+        // Debug.Log("Creating items for no tutorial stage 1");
         ClearItems();
         TestCreateItems(Compost, Compost.Count, CompostColor);
         TestCreateItems(MixedRecycling, MixedRecycling.Count, MixedRecyclingColor);
@@ -170,6 +169,8 @@ public class ScrollViewSample : MonoBehaviour
         TestCreateItems(Landfill, Landfill.Count, LandfillColor);
         TestCreateItems(Donation, Donation.Count, DonationColor);
         TestCreateItems(RequiresCleaning, RequiresCleaning.Count, RequiresCleaningColor);
+        UpdateAllButtonNavigationReferences();
+        StartCoroutine(DelayedSelectChild(_defaultSelectedIntex));
     }
     public void ClearItems()
     {

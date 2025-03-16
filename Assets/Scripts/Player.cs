@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour
@@ -11,6 +13,12 @@ public class Player : MonoBehaviour
     public Sprite idleSprite;
     public Sprite[] movingSprites;
     public Sprite[] shootSprites;
+
+    public GameObject player;
+    public GameObject tutorialPlayer;
+
+    private GameObject activePlayer;
+
     public float animationSpeed;
 
     private int shootingFrame;
@@ -69,7 +77,61 @@ public class Player : MonoBehaviour
         rightArrowImage = rightArrow.GetComponent<Image>();
         normalLeftArrow = leftArrowImage.sprite;
         normalRightArrow = rightArrowImage.sprite;
+        UpdateActivePlayer();
+        UpdateEventTriggers();
 
+
+    }
+    public void OnTutorialStateChanged()
+    {
+        UpdateActivePlayer();
+        UpdateEventTriggers();
+    }
+    private void UpdateActivePlayer()
+    {
+        // Check if the tutorialPlayer is active in the hierarchy, not just the activeSelf
+        if (tutorialPlayer.activeInHierarchy)
+        {
+            activePlayer = tutorialPlayer;
+        }
+        else if (player.activeInHierarchy)
+        {
+            activePlayer = player;
+        }
+
+    }
+    private void UpdateEventTriggers()
+    {
+        EventTrigger leftArrowTrigger = leftArrow.GetComponent<EventTrigger>();
+        EventTrigger rightArrowTrigger = rightArrow.GetComponent<EventTrigger>();
+        rightArrowTrigger.triggers.Clear();
+        leftArrowTrigger.triggers.Clear();
+        AddEvent(rightArrowTrigger, EventTriggerType.PointerDown, () =>
+      {
+          activePlayer.GetComponent<Player>().MoveRightButton();
+      });
+
+        // Add PointerUp event for RightArrow
+        AddEvent(rightArrowTrigger, EventTriggerType.PointerUp, () =>
+        {
+            activePlayer.GetComponent<Player>().MoveRightButtonStop();
+        });
+        AddEvent(leftArrowTrigger, EventTriggerType.PointerDown, () =>
+        {
+            activePlayer.GetComponent<Player>().MoveLeftButton();
+        });
+
+        // Add PointerUp event for LeftArrow
+        AddEvent(leftArrowTrigger, EventTriggerType.PointerUp, () =>
+        {
+            activePlayer.GetComponent<Player>().MoveLeftButtonStop();
+        });
+    }
+    private void AddEvent(EventTrigger trigger, EventTriggerType eventType, UnityAction action)
+    {
+        EventTrigger.Entry entry = new EventTrigger.Entry { eventID = eventType };
+        entry.callback.AddListener((data) => action.Invoke());
+        trigger.triggers.Add(entry);
     }
     public void MoveLeftButton()
     {

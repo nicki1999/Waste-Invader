@@ -116,8 +116,9 @@ public class Stage2Tutorial : MonoBehaviour
             if (TutorialStage == 2)
             {
                 InGameUI.SetActive(true);
-                string[] flashButtons = { "button_yellow", "button_blue", "button_purple", "button_brown" };
-                string[] hideButtons = { "LeftArrow", "RightArrow", "Button_Idle" };
+                string[] flashButtons = { "button_yellow", "button_blue", "button_purple", "button_brown", "LeftArrow", "RightArrow" };
+                string[] hideButtons = { "Button_Idle" };
+                //tring[] navigationButtons = { "LeftArrow", "RightArrow" };
                 StartCoroutine(TutorialScript.FlashButtons(InGameUI, 3, 0.5f, flashButtons, hideButtons, true, HUD));
             }
             for (int i = 0; i < CurrentString.Length; i++)

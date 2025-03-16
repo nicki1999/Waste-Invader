@@ -11,6 +11,7 @@ using UnityEngine.UI;
 public sealed class GameManager : MonoBehaviour
 {
     private Player player;
+    public Player tutorialPlayer;
     private EnemyController enemyController;
 
     public GameObject gameOverUI;
@@ -99,7 +100,7 @@ public sealed class GameManager : MonoBehaviour
     public GameObject leaderboardObject;
 
     private float biggerTolerance = 0.1f;
-
+    private Player activePlayerScript;
     private KeyCode[] sequence = new KeyCode[]
     {
         KeyCode.Joystick1Button1,
@@ -126,6 +127,7 @@ public sealed class GameManager : MonoBehaviour
     {
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
+        activePlayerScript = player.GetComponent<Player>();
 
 
         player.killed += OnPlayerKilled;
@@ -268,6 +270,12 @@ public sealed class GameManager : MonoBehaviour
     // If no lives and player hits enter, restart
     private void Update()
     {
+        if (TutorialObjects.activeSelf)
+        {
+        }
+        else
+        {
+        }
         if ((RecyclingUI.activeSelf && ContinueButtonStage1.activeSelf) || RecyclingUI.activeSelf && ContinueButtonStage2.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -704,6 +712,21 @@ public sealed class GameManager : MonoBehaviour
             // buttons that need to be disabled for stage 1
             String[] disableButtons = new string[] { "button_yellow", "button_blue", "button_brown", "button_purple" };
             String[] disableButtonsStage2 = new string[] { "Button_Idle" };
+            String[] permanentlyDisableButtons = new string[] { "RightArrowTutorial", "LeftArrowTutorial" };
+            if (!TutorialObjects.activeSelf && !Stage2TutorialObjects.activeSelf)
+            {
+                foreach (Button button in conditionalButtons)
+                {
+                    foreach (string disableButton in permanentlyDisableButtons)
+                    {
+                        if (button.name.Contains(disableButton))
+                        {
+                            button.interactable = false;
+                            button.gameObject.SetActive(false);
+                        }
+                    }
+                }
+            }
             if (Stage == 1 || TutorialObjects.activeSelf)
             {
                 foreach (Button button in conditionalButtons)
@@ -838,7 +861,15 @@ public sealed class GameManager : MonoBehaviour
     void TriggerButton(string buttonBaseName, int selectedWeapon, string audioType)
     {
         //Debug.Log($"Triggering button {selectedWeapon}");
-        this.player.FireWeaponButton(selectedWeapon, audioType);
+        if (TutorialObjects.activeSelf || Stage2TutorialObjects.activeSelf)
+        {
+            tutorialPlayer.FireWeaponButton(selectedWeapon, audioType);
+        }
+        else
+        {
+            this.player.FireWeaponButton(selectedWeapon, audioType);
+
+        }
         GameObject button = FindButtonByName(buttonBaseName);
         if (button != null)
         {
@@ -887,7 +918,7 @@ public sealed class GameManager : MonoBehaviour
         {
             item.gameObject.SetActive(false);
         }
-
+        wiki.CreateItemsNoTutorialStage1();
         InGameUI.SetActive(false);
         MenuUI.SetActive(true);
         CreditsUI.SetActive(false);
@@ -931,6 +962,7 @@ public sealed class GameManager : MonoBehaviour
     // Reset score and lives, disable game over ui, and restart game
     public void NewGame()
     {
+
         GamesPlayed++;
         StatTrackerStats[0].text = GamesPlayed.ToString();
         PlayerPrefs.SetInt("GamesPlayed", GamesPlayed);
@@ -952,6 +984,7 @@ public sealed class GameManager : MonoBehaviour
         InGameUI.SetActive(true);
         MenuUI.SetActive(false);
         TutorialUI.SetActive(false);
+        wiki.CreateItemsNoTutorialStage1();
         if (TutorialObjects != null)
         {
             Player player = TutorialObjects.GetComponentInChildren<Player>();
@@ -983,9 +1016,11 @@ public sealed class GameManager : MonoBehaviour
         TimerRunning = true;
         PauseTimers = false;
         WatchedStage2Tutorial = false;
+        activePlayerScript.OnTutorialStateChanged();
 
         StartCoroutine(Countdown());
         StartCoroutine(SessionDuration());
+
     }
 
     public void StartTutorial()
@@ -993,7 +1028,7 @@ public sealed class GameManager : MonoBehaviour
         RenderSettings.skybox = TutorialSkybox;
         TutorialActive = true;
         TutorialObjects.SetActive(true);
-        wiki.CreateItemsTutorialStage1();
+        //wiki.CreateItemsTutorialStage1();
 
 
         TutorialText.SetActive(true);
@@ -1041,6 +1076,8 @@ public sealed class GameManager : MonoBehaviour
     }
     public void ShowTutorial()
     {
+        wiki.CreateItemsTutorialStage1();
+
         MenusToggleOn(KeyboardUI);
         MenusToggleOff(TutorialUI);
         //KeyboardButton.onClick.AddListener(() => StartCoroutine(Main.Instance.web.FilterPlayerName(Keyboard.storedText)));
@@ -1054,6 +1091,8 @@ public sealed class GameManager : MonoBehaviour
     }
     public void SkipTutorial()
     {
+        wiki.CreateItemsNoTutorialStage1();
+
         MenusToggleOn(KeyboardUI);
         MenusToggleOff(TutorialUI);
         KeyboardButton.onClick.AddListener(() =>
@@ -1131,6 +1170,8 @@ public sealed class GameManager : MonoBehaviour
         CurrentPlayer = Keyboard.storedText;
 
         // Wait for the coroutine to finish before continuing
+        //         MenusToggleOn(LoadingUI);
+        // MenusToggleOff(MenuUI);
         yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
 
         // Now execute the rest of the code

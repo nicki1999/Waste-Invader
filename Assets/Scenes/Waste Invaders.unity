@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.5594344, g: 0.6789522, b: 0.71223634, a: 1}
+  m_IndirectSpecularColor: {r: 0.6280407, g: 0.76219565, b: 0.79951715, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2659,7 +2659,6 @@ GameObject:
   - component: {fileID: 80217356}
   - component: {fileID: 80217358}
   - component: {fileID: 80217360}
-  - component: {fileID: 80217359}
   m_Layer: 5
   m_Name: RightArrow
   m_TagString: Untagged
@@ -2696,51 +2695,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 80217355}
   m_CullTransparentMesh: 1
---- !u!114 &80217359
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 80217355}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1639391302}
-          m_TargetAssemblyTypeName: Player, Assembly-CSharp
-          m_MethodName: MoveRightButton
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1639391302}
-          m_TargetAssemblyTypeName: Player, Assembly-CSharp
-          m_MethodName: MoveRightButtonStop
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &80217360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7534,6 +7488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e7a6cd5aff8fbb45addc29ac8d5f71b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorialPlayer: {fileID: 2005782665}
   gameOverUI: {fileID: 797358150}
   ratingUI: {fileID: 943304852}
   scoreText: {fileID: 1984502043}
@@ -23033,7 +22988,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 736655586}
   m_HandleRect: {fileID: 736655585}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -34520,7 +34475,9 @@ MonoBehaviour:
   TutorialContinuePrompt: {fileID: 1718487230}
   RecyclingTips: {fileID: 1904298710}
   GM: {fileID: 256824699}
-  ContinueButton: {fileID: 410122378}
+  WikiContinueButton: {fileID: 410122378}
+  WikiReturnButton: {fileID: 1181212458}
+  wiki: {fileID: 971509234}
   TextObject: {fileID: 44805884}
   PrintString:
   - Welcome to Waste Invaders! This game is here to teach you about how to take care
@@ -41465,7 +41422,6 @@ GameObject:
   - component: {fileID: 1343210133}
   - component: {fileID: 1343210135}
   - component: {fileID: 1343210137}
-  - component: {fileID: 1343210136}
   m_Layer: 5
   m_Name: LeftArrow
   m_TagString: Untagged
@@ -41502,51 +41458,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1343210132}
   m_CullTransparentMesh: 1
---- !u!114 &1343210136
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1343210132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1639391302}
-          m_TargetAssemblyTypeName: Player, Assembly-CSharp
-          m_MethodName: MoveLeftButton
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1639391302}
-          m_TargetAssemblyTypeName: Player, Assembly-CSharp
-          m_MethodName: MoveLeftButtonStop
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &1343210137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42768,18 +42679,6 @@ MonoBehaviour:
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1385662417}
-          m_TargetAssemblyTypeName: Player, Assembly-CSharp
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -50281,6 +50180,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0c60207bb88534f4887512c4e492f763, type: 3}
   - {fileID: 21300000, guid: 9f3d94f43df85df49b3e6253f774177e, type: 3}
   - {fileID: 21300000, guid: 5cb031dfde81a884ba6290b7fc917991, type: 3}
+  player: {fileID: 1639391297}
+  tutorialPlayer: {fileID: 2005782663}
   animationSpeed: 0.08
   moving: 0
   movingLeft: 0
@@ -62895,12 +62796,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0c60207bb88534f4887512c4e492f763, type: 3}
   - {fileID: 21300000, guid: 9f3d94f43df85df49b3e6253f774177e, type: 3}
   - {fileID: 21300000, guid: 5cb031dfde81a884ba6290b7fc917991, type: 3}
+  player: {fileID: 1639391297}
+  tutorialPlayer: {fileID: 2005782663}
   animationSpeed: 0.08
   moving: 0
-  movingLeft: 1
+  movingLeft: 0
   selectedWeapon: 0
   Health: 6
-  maxHealth: 6
+  maxHealth: 600
   healthSlider: {fileID: 1411955889}
   flashing: 0
   neededWeaponText: {fileID: 1216706934}
