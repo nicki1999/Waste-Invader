@@ -147,9 +147,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 08000000
+  Stage1EnemyType: 01000000
   Stage2EnemyType: 01000000
   animationImages:
   - {fileID: 21300000, guid: d39bc53be02e7b244bd128305f266fc2, type: 3}
   animationTime: 1
   EnemyName: Wet Cardboard Box
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0
+  countWrongHit: 0

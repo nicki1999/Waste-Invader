@@ -147,9 +147,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 03000000
-  Stage2EnemyType: 02000000
+  Stage1EnemyType: 0500000008000000
+  Stage2EnemyType: 0500000006000000
   animationImages:
   - {fileID: 21300000, guid: 47f5f790791f5c348bf428d956f9ad31, type: 3}
   animationTime: 1
   EnemyName: PVC Pipe
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0
+  countWrongHit: 0

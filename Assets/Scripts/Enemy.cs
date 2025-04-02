@@ -26,6 +26,8 @@ public class Enemy : MonoBehaviour
     public int PopUpMessageInt = 0;
 
     public int countWrongHit = 0;
+
+    public int requiresCleaningObject = 0;
     private bool canTrigger = true;
     private void Awake()
     {

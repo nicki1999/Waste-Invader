@@ -147,9 +147,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 00000000
+  Stage1EnemyType: 01000000
   Stage2EnemyType: 01000000
   animationImages:
   - {fileID: 21300000, guid: 2b547a4b59a1515469996df230001fe9, type: 3}
   animationTime: 1
   EnemyName: Waxed Cardboard
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0
+  countWrongHit: 0

@@ -147,9 +147,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 07000000
+  Stage1EnemyType: 05000000
   Stage2EnemyType: 05000000
   animationImages:
   - {fileID: 21300000, guid: 5a43ee4dcd01da047bd41788cc93fbe9, type: 3}
   animationTime: 1
   EnemyName: Synthetic Fibers
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0
+  countWrongHit: 0

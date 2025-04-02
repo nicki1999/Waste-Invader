@@ -147,9 +147,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 04000000
-  Stage2EnemyType: 02000000
+  Stage1EnemyType: 08000000
+  Stage2EnemyType: 06000000
   animationImages:
   - {fileID: 21300000, guid: 963f66a9764a7b74c9eed7729dbc109d, type: 3}
   animationTime: 1
   EnemyName: Bubble Wrap
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0
+  countWrongHit: 0

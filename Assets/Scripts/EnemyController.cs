@@ -353,14 +353,25 @@ public class EnemyController : MonoBehaviour
     // When enemy dies, deactivate it and move up the counter
     private void EnemyDeath(Enemy enemy)
     {
-        enemy.gameObject.SetActive(false);
-        NumberKilled++;
-        killed(enemy);
-
         if (enemy.PopUpMessageInt > 0)
         {
             gameManager.IndividualPopUpMessage(enemy);
         }
+        if (enemy.PopUpMessageInt == 1)
+        {
+            enemy.requiresCleaningObject += 1;
+            if (enemy.requiresCleaningObject >= 2)
+            {
+                enemy.requiresCleaningObject = 0;
+                enemy.gameObject.SetActive(false);
+                NumberKilled++;
+                killed(enemy);
+            }
+            return;
+        }
+        enemy.gameObject.SetActive(false);
+        NumberKilled++;
+        killed(enemy);
     }
 
     private void IncorrectlyHit(Enemy enemy)

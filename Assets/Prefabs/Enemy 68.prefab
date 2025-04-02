@@ -147,9 +147,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 02000000
+  Stage1EnemyType: 03000000
   Stage2EnemyType: 03000000
   animationImages:
   - {fileID: 21300000, guid: 3226bfe5a49c21f4ca5528ea779e2ddd, type: 3}
   animationTime: 1
   EnemyName: Scannable Metro Card
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0
+  countWrongHit: 0

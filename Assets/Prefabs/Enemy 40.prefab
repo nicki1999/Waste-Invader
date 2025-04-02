@@ -147,9 +147,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 04000000
+  Stage1EnemyType: 08000000
   Stage2EnemyType: 06000000
   animationImages:
   - {fileID: 21300000, guid: cfe5c8b3192c4fe4fb82186a64336977, type: 3}
   animationTime: 1
   EnemyName: Garbage Bag
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0
+  countWrongHit: 0

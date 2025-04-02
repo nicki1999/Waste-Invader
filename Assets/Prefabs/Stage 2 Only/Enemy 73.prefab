@@ -147,9 +147,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 00000000
+  Stage1EnemyType: 07000000
   Stage2EnemyType: 07000000
   animationImages:
   - {fileID: 21300000, guid: 927fd1fae43e647469f235b287d0d607, type: 3}
   animationTime: 1
   EnemyName: Sunglasses
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0
+  countWrongHit: 0

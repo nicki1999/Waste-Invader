@@ -156,3 +156,4 @@ MonoBehaviour:
   BonusHit: 0
   BonusHitTypes: 
   PopUpMessageInt: 6
+  countWrongHit: 0
