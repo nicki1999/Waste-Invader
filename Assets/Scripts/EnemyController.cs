@@ -357,7 +357,7 @@ public class EnemyController : MonoBehaviour
         {
             gameManager.IndividualPopUpMessage(enemy);
         }
-        if (enemy.PopUpMessageInt == 1)
+        if (enemy.PopUpMessageInt == 1 && gameManager.Stage == 2)
         {
             enemy.requiresCleaningObject += 1;
             if (enemy.requiresCleaningObject >= 2)
