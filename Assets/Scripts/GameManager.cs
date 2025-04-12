@@ -1805,6 +1805,7 @@ public sealed class GameManager : MonoBehaviour
 
     public void IncorrectPopUpMessage(Enemy enemy)
     {
+        Color flashRed = new Color(199f / 255f, 70f / 255f, 70f / 255f); // #C74646 in Unity RGB
         string message = "";
 
         if (Stage == 1)
@@ -1842,10 +1843,11 @@ public sealed class GameManager : MonoBehaviour
                 message = "Dispose this item with the \"Landfill/Trash\" button";
             }
 
-            StartCoroutine(ActivatePopUp(enemy, message));
+            StartCoroutine(ActivatePopUp(enemy, message, flashRed));
         }
         else if (Stage == 2)
         {
+
             if (enemy.Stage2EnemyType[0] == 1)
             {
                 message = "Dispose this item with the \"Compost\" button";
@@ -1879,12 +1881,13 @@ public sealed class GameManager : MonoBehaviour
                 message = "Dispose this item with the \"Landfill/Trash\" button";
             }
 
-            StartCoroutine(ActivatePopUp(enemy, message));
+            StartCoroutine(ActivatePopUp(enemy, message, flashRed));
         }
     }
 
     public void IndividualPopUpMessage(Enemy enemy)
     {
+        Color flashGreen = new Color(70f / 255f, 199f / 255f, 70f / 255f); // #46C746 in Unity RGB
         string message = "";
 
         if (enemy.PopUpMessageInt == 1)
@@ -1920,10 +1923,10 @@ public sealed class GameManager : MonoBehaviour
             message = "Thin and stretchy plastic has chemicals that can't be separated from the plastic, and therefore cannot be replaced.";
         }
 
-        StartCoroutine(ActivatePopUp(enemy, message));
+        StartCoroutine(ActivatePopUp(enemy, message, flashGreen));
     }
 
-    public IEnumerator ActivatePopUp(Enemy enemy, string message)
+    public IEnumerator ActivatePopUp(Enemy enemy, string message, Color flashColor)
     {
         if (PopUpUI.activeSelf)
         {
@@ -1938,7 +1941,7 @@ public sealed class GameManager : MonoBehaviour
         Vector3 originalPos = rectTransform.anchoredPosition;
         Image popupImage = PopUpUI.GetComponent<Image>();
         Color color = popupImage.color;
-        Color flashRed = new Color(199f / 255f, 70f / 255f, 70f / 255f); // #C74646 in Unity RGB
+        //Color flashRed = new Color(199f / 255f, 70f / 255f, 70f / 255f); // #C74646 in Unity RGB
 
         PopUpUI.SetActive(true);
         PopUpText.text = message;
@@ -1953,7 +1956,7 @@ public sealed class GameManager : MonoBehaviour
 
 
                 float t = Mathf.PingPong(Time.time * magnitude, 1f);
-                popupImage.color = Color.Lerp(color, flashRed, t);
+                popupImage.color = Color.Lerp(color, flashColor, t);
             }
             else
             {
