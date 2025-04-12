@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
     public int countWrongHit = 0;
 
     public int requiresCleaningObject = 0;
-    private bool canTrigger = true;
+    private static bool canTrigger = true;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -55,6 +55,7 @@ public class Enemy : MonoBehaviour
     // Coroutine to handle the delay
     private IEnumerator TriggerCooldown()
     {
+        Debug.Log("Trigger Cooldown started" + canTrigger);
         // Set canTrigger to false so the trigger doesn't happen again immediately
         canTrigger = false;
 
