@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.6280407, g: 0.76219565, b: 0.79951715, a: 1}
+  m_IndirectSpecularColor: {r: 0.6054005, g: 0.73440653, b: 0.77061695, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -50517,7 +50517,7 @@ MonoBehaviour:
   movingLeft: 0
   selectedWeapon: 0
   Health: 6
-  maxHealth: 600
+  maxHealth: 12
   healthSlider: {fileID: 1411955889}
   flashing: 0
   neededWeaponText: {fileID: 1216706934}

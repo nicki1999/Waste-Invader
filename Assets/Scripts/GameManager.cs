@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -55,7 +56,7 @@ public sealed class GameManager : MonoBehaviour
     public Material DaySkybox;
     public Material NightSkybox;
     public Material TutorialSkybox;
-
+    private UnityAction keyboardButtonListener;
     public GameObject[] buttons;
     public GameObject LeftButtonContainer;
     public GameObject RightButtonContainer;
@@ -263,7 +264,7 @@ public sealed class GameManager : MonoBehaviour
 
         MainMenu();
 
-        GetLeaderboard(MenuUI);
+        //GetLeaderboard(MenuUI);
 
     }
 
@@ -954,6 +955,7 @@ public sealed class GameManager : MonoBehaviour
 
         KeyboardButton.onClick.RemoveListener(NewGame);
         KeyboardButton.onClick.RemoveListener(StartTutorial);
+        KeyboardButton.onClick.RemoveListener(keyboardButtonListener);
 
         if (!MenuBG.activeSelf)
             MenuBG.SetActive(true);
@@ -962,7 +964,7 @@ public sealed class GameManager : MonoBehaviour
     // Reset score and lives, disable game over ui, and restart game
     public void NewGame()
     {
-
+        Debug.Log("NewGame called");
         GamesPlayed++;
         StatTrackerStats[0].text = GamesPlayed.ToString();
         PlayerPrefs.SetInt("GamesPlayed", GamesPlayed);
@@ -974,6 +976,7 @@ public sealed class GameManager : MonoBehaviour
 
         gameOverUI.SetActive(false);
         ratingUI.SetActive(false);
+
         TutorialActive = false;
 
         foreach (Transform item in toggleOnGO)
@@ -1025,9 +1028,11 @@ public sealed class GameManager : MonoBehaviour
 
     public void StartTutorial()
     {
+        Debug.Log("StartTutorial called");
         RenderSettings.skybox = TutorialSkybox;
         TutorialActive = true;
         TutorialObjects.SetActive(true);
+        //InGameUI.SetActive(false);
         //wiki.CreateItemsTutorialStage1();
 
 
@@ -1076,29 +1081,34 @@ public sealed class GameManager : MonoBehaviour
     }
     public void ShowTutorial()
     {
+        keyboardButtonListener = () =>
+        {
+            StartCoroutine(WaitForErrorTextAndShowTutorial());
+        };
+        Debug.Log("ShowTutorial called");
         wiki.CreateItemsTutorialStage1();
 
         MenusToggleOn(KeyboardUI);
         MenusToggleOff(TutorialUI);
-        //KeyboardButton.onClick.AddListener(() => StartCoroutine(Main.Instance.web.FilterPlayerName(Keyboard.storedText)));
-        KeyboardButton.onClick.AddListener(() =>
-        {
-            StartCoroutine(WaitForErrorTextAndShowTutorial());
-        });
+        KeyboardButton.onClick.AddListener(keyboardButtonListener);
+
         audioManager.Play("Confirm");
         GraceChecker = false;
         GracePeriod = false;
     }
     public void SkipTutorial()
     {
+        keyboardButtonListener = () =>
+        {
+            StartCoroutine(WaitForErrorTextAndStartGame());
+        };
+        Debug.Log("SkipTutorial called");
         wiki.CreateItemsNoTutorialStage1();
 
         MenusToggleOn(KeyboardUI);
         MenusToggleOff(TutorialUI);
-        KeyboardButton.onClick.AddListener(() =>
-        {
-            StartCoroutine(WaitForErrorTextAndStartGame());
-        });
+        KeyboardButton.onClick.AddListener(keyboardButtonListener);
+
         // KeyboardButton.onClick.AddListener(NewGame);
         audioManager.Play("Confirm");
         GraceChecker = false;
@@ -1169,19 +1179,17 @@ public sealed class GameManager : MonoBehaviour
     {
         CurrentPlayer = Keyboard.storedText;
 
-        // Wait for the coroutine to finish before continuing
-        //         MenusToggleOn(LoadingUI);
-        // MenusToggleOff(MenuUI);
-        yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
-
-        // Now execute the rest of the code
-        Keyboard.storedText = "";
+        //yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
+        yield return
+                // Now execute the rest of the code
+                Keyboard.storedText = "";
         Keyboard.displayText.text = "";
 
         if (string.IsNullOrEmpty(Main.Instance.web.errorText.text))
         {
             Debug.Log("Error text is null or empty");
             MenusToggleOff(KeyboardUI);
+            Debug.Log("Starting Tutorial...");
             StartTutorial();
         }
         else
@@ -1195,8 +1203,8 @@ public sealed class GameManager : MonoBehaviour
         CurrentPlayer = Keyboard.storedText;
 
         // Wait for the coroutine to finish before continuing
-        yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
-
+        //yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
+        yield return
         // Now execute the rest of the code
         Keyboard.storedText = "";
         Keyboard.displayText.text = "";
@@ -1205,6 +1213,8 @@ public sealed class GameManager : MonoBehaviour
         {
             Debug.Log("Error text is null or empty");
             MenusToggleOff(KeyboardUI);
+            MenusToggleOff(TutorialUI);
+            Debug.Log("Starting new game...");
             NewGame();
         }
         else
@@ -1427,9 +1437,10 @@ public sealed class GameManager : MonoBehaviour
                     WaveList != null && WaveList.Length > 0 && WaveList[0] != null &&
                     ScoreList != null && ScoreList.Length > 0 && ScoreList[0] != null)
                 {
-                    yield return StartCoroutine(Main.Instance.web.AddToLeaderboard(
-                        NameList[0].text, int.Parse(WaveList[0].text), int.Parse(ScoreList[0].text)));
-                    GetLeaderboard(MenuUI);
+                    // yield return StartCoroutine(Main.Instance.web.AddToLeaderboard(
+                    //     NameList[0].text, int.Parse(WaveList[0].text), int.Parse(ScoreList[0].text)));
+                    //GetLeaderboard(MenuUI);
+                    yield return null;
 
                 }
                 else
@@ -1547,9 +1558,11 @@ public sealed class GameManager : MonoBehaviour
     }
     private IEnumerator WaitAndFetchLeaderboard(GameObject currentActiveScene)
     {
-        yield return StartCoroutine(Main.Instance.web.GetLeaderboard(LeaderboardScoreList, LeaderboardWaveList, LeaderboardNameList));
+        //yield return StartCoroutine(Main.Instance.web.GetLeaderboard(LeaderboardScoreList, LeaderboardWaveList, LeaderboardNameList));
+
         MenusToggleOff(LoadingUI);
         MenusToggleOn(MenuUI);
+        yield return null;
 
     }
     // When an enemy dies, add score, if all dead, start next round
