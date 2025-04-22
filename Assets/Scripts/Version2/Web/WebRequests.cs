@@ -42,7 +42,7 @@ public class WebRequests : MonoBehaviour
     public IEnumerator FilterPlayerName(string playerName)
     {
 
-        string uri = "https://59d8-132-205-229-34.ngrok-free.app/SpaceInvadersBackend/UsernameChecker.php";
+        string uri = "https://7b19-132-205-232-104.ngrok-free.app/SpaceInvadersBackend/UsernameChecker.php";
         WWWForm form = new WWWForm();
         form.AddField("playerName", playerName);
         Debug.Log($"Sending Data -> Name: {playerName}");
@@ -85,7 +85,7 @@ public class WebRequests : MonoBehaviour
 
     public IEnumerator GetLeaderboard(Text[] LeaderboardScoreList, Text[] LeaderboardWaveList, Text[] LeaderboardNameList)
     {
-        string uri = "https://59d8-132-205-229-34.ngrok-free.app/SpaceInvadersBackend/GetLeaderboard.php";
+        string uri = "https://7b19-132-205-232-104.ngrok-free.app/SpaceInvadersBackend/GetLeaderboard.php";
         UnityWebRequest webRequest = UnityWebRequest.Post(uri, "");
         webRequest.SetRequestHeader("Content-Type", "application/json");
 
@@ -130,7 +130,7 @@ public class WebRequests : MonoBehaviour
     {
         Debug.Log($"AddToLeaderboard started: {playerName}, {playerWave}, {playerScore}");
 
-        string uri = "https://59d8-132-205-229-34.ngrok-free.app/SpaceInvadersBackend/AddToLeaderboard.php";
+        string uri = "https://7b19-132-205-232-104.ngrok-free.app/SpaceInvadersBackend/AddToLeaderboard.php";
         WWWForm form = new WWWForm();
         form.AddField("playerName", playerName);
         form.AddField("playerWave", playerWave);

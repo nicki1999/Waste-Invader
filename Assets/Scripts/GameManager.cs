@@ -264,7 +264,7 @@ public sealed class GameManager : MonoBehaviour
 
         MainMenu();
 
-        //GetLeaderboard(MenuUI);
+        GetLeaderboard(MenuUI);
 
     }
 
@@ -953,9 +953,12 @@ public sealed class GameManager : MonoBehaviour
         IdleCheck = false;
         Stage = 0;
 
-        KeyboardButton.onClick.RemoveListener(NewGame);
-        KeyboardButton.onClick.RemoveListener(StartTutorial);
-        KeyboardButton.onClick.RemoveListener(keyboardButtonListener);
+        if (KeyboardButton != null && keyboardButtonListener != null)
+        {
+            KeyboardButton.onClick.RemoveListener(NewGame);
+            KeyboardButton.onClick.RemoveListener(StartTutorial);
+            KeyboardButton.onClick.RemoveListener(keyboardButtonListener);
+        }
 
         if (!MenuBG.activeSelf)
             MenuBG.SetActive(true);
@@ -1179,10 +1182,10 @@ public sealed class GameManager : MonoBehaviour
     {
         CurrentPlayer = Keyboard.storedText;
 
-        //yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
-        yield return
-                // Now execute the rest of the code
-                Keyboard.storedText = "";
+        yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
+        //yield return
+        // Now execute the rest of the code
+        Keyboard.storedText = "";
         Keyboard.displayText.text = "";
 
         if (string.IsNullOrEmpty(Main.Instance.web.errorText.text))
@@ -1203,8 +1206,8 @@ public sealed class GameManager : MonoBehaviour
         CurrentPlayer = Keyboard.storedText;
 
         // Wait for the coroutine to finish before continuing
-        //yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
-        yield return
+        yield return StartCoroutine(Main.Instance.web.FilterPlayerName(CurrentPlayer));
+        //yield return
         // Now execute the rest of the code
         Keyboard.storedText = "";
         Keyboard.displayText.text = "";
@@ -1437,10 +1440,10 @@ public sealed class GameManager : MonoBehaviour
                     WaveList != null && WaveList.Length > 0 && WaveList[0] != null &&
                     ScoreList != null && ScoreList.Length > 0 && ScoreList[0] != null)
                 {
-                    // yield return StartCoroutine(Main.Instance.web.AddToLeaderboard(
-                    //     NameList[0].text, int.Parse(WaveList[0].text), int.Parse(ScoreList[0].text)));
-                    //GetLeaderboard(MenuUI);
-                    yield return null;
+                    yield return StartCoroutine(Main.Instance.web.AddToLeaderboard(
+                          NameList[0].text, int.Parse(WaveList[0].text), int.Parse(ScoreList[0].text)));
+                    GetLeaderboard(MenuUI);
+                    //yield return null;
 
                 }
                 else
@@ -1506,6 +1509,7 @@ public sealed class GameManager : MonoBehaviour
     }
     private void GetLeaderboard(GameObject currentActiveScene)
     {
+        Debug.Log("GetLeaderboard called");
         //1. assign the text to leaderboard
         int childCount = leaderboardObject.transform.childCount;
 
@@ -1558,11 +1562,11 @@ public sealed class GameManager : MonoBehaviour
     }
     private IEnumerator WaitAndFetchLeaderboard(GameObject currentActiveScene)
     {
-        //yield return StartCoroutine(Main.Instance.web.GetLeaderboard(LeaderboardScoreList, LeaderboardWaveList, LeaderboardNameList));
+        yield return StartCoroutine(Main.Instance.web.GetLeaderboard(LeaderboardScoreList, LeaderboardWaveList, LeaderboardNameList));
 
         MenusToggleOff(LoadingUI);
         MenusToggleOn(MenuUI);
-        yield return null;
+        //yield return null;
 
     }
     // When an enemy dies, add score, if all dead, start next round
