@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
+using System.Collections.Generic;
+
 
 public class EnemyController : MonoBehaviour
 {
@@ -206,48 +209,73 @@ public class EnemyController : MonoBehaviour
                 {
                     if (Random.Range(1, 101) <= gameManager.TintedEnemyChance)
                     {
-                        enemy = Instantiate(TintedEnemiesStage1[Random.Range(0, TintedEnemiesStage1.Length)], transform);
-                        // while (enemy.Stage1EnemyType[0] == 3 || enemy.Stage1EnemyType[0] == 5 || enemy.Stage1EnemyType[0] == 7 || enemy.Stage1EnemyType[0] == 8)
-                        // {
-                        //     enemy = Instantiate(TintedEnemies[Random.Range(0, TintedEnemies.Length)], transform);
-                        // }
-                        // Color enemyColor = new Color();
-                        // if (enemy.Stage1EnemyType[0] == 1)
-                        // {
-                        //     enemyColor = new Color(255f / 255f, 0f / 255f, 0f / 255f, 1);
-                        // }
-                        // else if (enemy.Stage1EnemyType[0] == 2)
-                        // {
-                        //     enemyColor = new Color(255f / 255f, 153f / 255f, 0f / 255f, 1);
-                        // }
-                        // else if (enemy.Stage1EnemyType[0] == 3)
-                        // {
-                        //     enemyColor = new Color(255f / 255f, 255f / 255f, 0f / 255f, 1);
-                        // }
-                        // else if (enemy.Stage1EnemyType[0] == 4)
-                        // {
-                        //     enemyColor = new Color(0f / 255f, 255f / 255f, 0f / 255f, 1);
-                        // }
-                        // else if (enemy.Stage1EnemyType[0] == 5)
-                        // {
-                        //     enemyColor = new Color(74f / 255f, 134f / 255f, 232f / 255f, 1);
-                        // }
-                        // else if (enemy.Stage1EnemyType[0] == 6)
-                        // {
-                        //     enemyColor = new Color(153f / 255f, 0f / 255f, 255f / 255f, 1);
-                        //     enemy.GetComponent<Enemy>().Stage1EnemyType[0] = 8;
-                        // }
-                        // else if (enemy.Stage1EnemyType[0] == 7)
-                        // {
-                        //     enemyColor = new Color(232f / 255f, 202f / 255f, 142f / 255f, 1);
-                        // }
-                        // else if (enemy.Stage1EnemyType[0] == 8)
-                        // {
-                        //     enemyColor = new Color(1f, 1f, 1f, 1);
-                        // }
+                        List<Enemy> preferred = new List<Enemy>();
 
-                        // enemy.GetComponent<SpriteRenderer>().color = enemyColor;
+                        foreach (var enemyPrefab in TintedEnemiesStage1)
+                        {
+                            if (enemyPrefab.Stage1EnemyType[0] == 1 || enemyPrefab.Stage1EnemyType[0] == 4)
+                            {
+                                preferred.Add(enemyPrefab);
+                            }
+                        }
+
+                        Enemy chosen;
+
+                        int roll = Random.Range(1, 101);
+
+                        if (roll <= 50 && preferred.Count > 0) // 70% prefer type 1 or 4
+                        {
+                            chosen = preferred[Random.Range(0, preferred.Count)];
+                        }
+                        else
+                        {
+                            chosen = TintedEnemiesStage1[Random.Range(0, TintedEnemiesStage1.Length)];
+                        }
+
+                        // Instantiate the chosen prefab
+                        enemy = Instantiate(chosen, transform);
                     }
+                    // while (enemy.Stage1EnemyType[0] == 3 || enemy.Stage1EnemyType[0] == 5 || enemy.Stage1EnemyType[0] == 7 || enemy.Stage1EnemyType[0] == 8)
+                    // {
+                    //     enemy = Instantiate(TintedEnemies[Random.Range(0, TintedEnemies.Length)], transform);
+                    // }
+                    // Color enemyColor = new Color();
+                    // if (enemy.Stage1EnemyType[0] == 1)
+                    // {
+                    //     enemyColor = new Color(255f / 255f, 0f / 255f, 0f / 255f, 1);
+                    // }
+                    // else if (enemy.Stage1EnemyType[0] == 2)
+                    // {
+                    //     enemyColor = new Color(255f / 255f, 153f / 255f, 0f / 255f, 1);
+                    // }
+                    // else if (enemy.Stage1EnemyType[0] == 3)
+                    // {
+                    //     enemyColor = new Color(255f / 255f, 255f / 255f, 0f / 255f, 1);
+                    // }
+                    // else if (enemy.Stage1EnemyType[0] == 4)
+                    // {
+                    //     enemyColor = new Color(0f / 255f, 255f / 255f, 0f / 255f, 1);
+                    // }
+                    // else if (enemy.Stage1EnemyType[0] == 5)
+                    // {
+                    //     enemyColor = new Color(74f / 255f, 134f / 255f, 232f / 255f, 1);
+                    // }
+                    // else if (enemy.Stage1EnemyType[0] == 6)
+                    // {
+                    //     enemyColor = new Color(153f / 255f, 0f / 255f, 255f / 255f, 1);
+                    //     enemy.GetComponent<Enemy>().Stage1EnemyType[0] = 8;
+                    // }
+                    // else if (enemy.Stage1EnemyType[0] == 7)
+                    // {
+                    //     enemyColor = new Color(232f / 255f, 202f / 255f, 142f / 255f, 1);
+                    // }
+                    // else if (enemy.Stage1EnemyType[0] == 8)
+                    // {
+                    //     enemyColor = new Color(1f, 1f, 1f, 1);
+                    // }
+
+                    // enemy.GetComponent<SpriteRenderer>().color = enemyColor;
+                
                     else
                     {
                         enemy = Instantiate(Stage1Enemies[Random.Range(0, Stage1Enemies.Length)], transform);

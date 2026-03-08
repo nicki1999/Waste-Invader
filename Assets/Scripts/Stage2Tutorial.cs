@@ -54,6 +54,7 @@ public class Stage2Tutorial : MonoBehaviour
     }
     public void SkipTutorialPromptStage2()
     {
+        Debug.Log("SkipTutorialPromptStage2");
         GraceChecker = false;
         GracePeriod = false;
         TutorialStage = 0;
@@ -77,13 +78,18 @@ public class Stage2Tutorial : MonoBehaviour
             }
             if (GracePeriod)
             {
+                //green button
                 if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
                 {
+                    Debug.Log("ShowTutorialPromptStage2");
                     ShowTutorialPromptStage2();
                 }
+                //red butto
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    SkipTutorialStage2();
+                    Debug.Log("SkipTutoialStage2");
+                    SkipTutorialPromptStage2();
+                    //SkipTutorialStage2();
                 }
             }
         }
@@ -110,6 +116,12 @@ public class Stage2Tutorial : MonoBehaviour
         GameObject HUD = InGameUI.transform.Find("HUDOverlay").gameObject;
         while (TutorialText.activeSelf)
         {
+            if (TutorialStage >= PrintString.Length)
+            {
+                Debug.LogError("TutorialStage exceeds PrintString length. Halting coroutine.");
+                yield break; // stop the coroutine
+            }
+
             CurrentString = PrintString[TutorialStage];
 
 

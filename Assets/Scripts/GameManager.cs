@@ -271,18 +271,18 @@ public sealed class GameManager : MonoBehaviour
     // If no lives and player hits enter, restart
     private void Update()
     {
-        if (TutorialObjects.activeSelf)
-        {
-        }
-        else
-        {
-        }
         if ((RecyclingUI.activeSelf && ContinueButtonStage1.activeSelf) || RecyclingUI.activeSelf && ContinueButtonStage2.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 ExitGame();
-                Debug.Log("pressed escape");
+            }
+        }
+        if(RecyclingUI.activeSelf && ContinueButtonStage2.activeSelf)
+        {
+            if(Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                SkipTipsPromptStage2();
             }
         }
         float currentAspect = (float)Screen.width / Screen.height;
@@ -408,10 +408,14 @@ public sealed class GameManager : MonoBehaviour
             }
             if (GracePeriod)
             {
-                if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
+                //arcade green button
+                //used to be   if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
+                if (Input.GetKeyDown(KeyCode.Joystick1Button3) ||  Input.GetKeyDown(KeyCode.Alpha4))
                 {
+                    Debug.Log("ShowTutorial called from TutorialUI");
                     ShowTutorial();
                 }
+                //arcade red button
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
                 {
                     SkipTutorial();

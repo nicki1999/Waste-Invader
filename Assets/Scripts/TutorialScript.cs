@@ -53,6 +53,13 @@ public class TutorialScript : MonoBehaviour
 
     void Update()
     {
+        if (RecyclingTips.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                ShowTutorial();
+            }
+        }
         if (TutorialPrompt.activeSelf)
         {
             if (!GraceChecker)
